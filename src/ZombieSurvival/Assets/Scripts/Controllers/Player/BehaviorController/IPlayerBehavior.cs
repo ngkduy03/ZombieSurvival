@@ -8,4 +8,5 @@ using UnityEngine;
 /// </summary>
 public interface IPlayerBehavior
 {
+    void Update();
 }

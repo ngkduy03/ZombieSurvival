@@ -1,16 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// 
 /// </summary>
 public class MoveController : ControllerBase, IMovementController
 {
+    private readonly Transform transform;
     private readonly Animator animator;
+    private readonly InputActionReference moveInput;
+    private readonly CharacterController characterController;
+    private float walkSpeed = 0;
+    private float walkAnimationSpeed = 1f;
+    private Vector3 moveDirection;
+    private const float walkSpeedAccel = 0.01f;
+    private const float walkSpeedAnimationAccel = 1.8f;
+    private int velocity;
+    private int state = Animator.StringToHash("State");
 
-    public MoveController(Animator animator)
+    public MoveController(
+        Transform transform,
+        Animator animator,
+        InputActionReference moveInput,
+        CharacterController characterController)
     {
+        this.transform = transform;
         this.animator = animator;
+        this.moveInput = moveInput;
+        this.characterController = characterController;
+        velocity = Animator.StringToHash("Velocity");
+    }
+
+    /// <summary>
+    /// Moves the player in the specified direction.
+    /// </summary>
+    public void Move()
+    {
+        var direction = moveInput.action.ReadValue<Vector2>().normalized;
+        moveDirection = new Vector3(direction.x, 0, direction.y);
+
+        // If the player is moving, set the velocity to the walk speed.
+        if (direction.magnitude > 0)
+        {
+            walkSpeed += walkSpeedAccel;
+            walkAnimationSpeed += walkSpeedAnimationAccel * Time.deltaTime;
+        }
+        else
+        {
+            // Slow down the player when not pressing the key with double the deceleration.
+            walkSpeed -= walkSpeedAccel * 10;
+            walkAnimationSpeed -= walkSpeedAnimationAccel * 2 * Time.deltaTime;
+        }
+
+        // Clamp the speed and animation speed.
+        walkSpeed = Mathf.Clamp(walkSpeed, 0, 5);
+        walkAnimationSpeed = Mathf.Clamp(walkAnimationSpeed, 0, 1);
+
+        // Set the animator's velocity parameter.
+        animator.SetFloat(velocity, walkAnimationSpeed);
+
+        // Move the character controller.
+        characterController.Move(moveDirection * walkSpeed * Time.deltaTime);
     }
 }

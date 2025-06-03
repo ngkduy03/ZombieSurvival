@@ -12,10 +12,17 @@ public class PlayerBehavior : ControllerBase, IPlayerBehavior
 
     public PlayerBehavior(
         IMovementController movementController,
-        IAttackController attackController
-    )
+        IAttackController attackController)
     {
         this.movementController = movementController;
         this.attackController = attackController;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Update()
+    {
+        movementController.Move();
     }
 }

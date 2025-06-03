@@ -5,15 +5,18 @@ using UnityEngine;
 /// <summary>
 /// 
 /// </summary>
+[DefaultExecutionOrder(-1)]
 public class GameLoopContext : BaseContext<ServiceInitializer>
 {
-    protected override void Deinitialize()
-    {
-        throw new System.NotImplementedException();
-    }
+    [SerializeField]
+    private PlayerComponent playerComponent;
 
     protected override void Initialize(IServiceContainer serviceResolver)
     {
-        throw new System.NotImplementedException();
+        playerComponent.CreateController();
+    }
+
+    protected override void Deinitialize()
+    {
     }
 }
