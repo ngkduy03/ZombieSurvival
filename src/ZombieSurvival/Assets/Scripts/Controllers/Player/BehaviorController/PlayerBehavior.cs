@@ -24,5 +24,6 @@ public class PlayerBehavior : ControllerBase, IPlayerBehavior
     public void Update()
     {
         movementController.Move();
+        movementController.Look();
     }
 }

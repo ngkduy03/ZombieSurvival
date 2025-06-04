@@ -11,6 +11,7 @@ public class MoveController : ControllerBase, IMovementController
     private readonly Transform transform;
     private readonly Animator animator;
     private readonly InputActionReference moveInput;
+    private readonly InputActionReference lookInput;
     private readonly CharacterController characterController;
     private float walkSpeed = 0;
     private float walkAnimationSpeed = 1f;
@@ -24,11 +25,13 @@ public class MoveController : ControllerBase, IMovementController
         Transform transform,
         Animator animator,
         InputActionReference moveInput,
+        InputActionReference lookInput,
         CharacterController characterController)
     {
         this.transform = transform;
         this.animator = animator;
         this.moveInput = moveInput;
+        this.lookInput = lookInput;
         this.characterController = characterController;
         velocity = Animator.StringToHash("Velocity");
     }
@@ -63,5 +66,19 @@ public class MoveController : ControllerBase, IMovementController
 
         // Move the character controller.
         characterController.Move(moveDirection * walkSpeed * Time.deltaTime);
+    }
+
+    /// <summary>
+    /// Rotates the player to face the direction of movement based on input.
+    /// </summary>
+    public void Look()
+    {
+        var lookDirection = lookInput.action.ReadValue<Vector2>();
+        if (lookDirection.magnitude > 0)
+        {
+            // Calculate the rotation based on the look direction.
+            var rotation = Quaternion.Euler(0, Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
+        }
     }
 }

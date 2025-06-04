@@ -23,7 +23,7 @@ public class PlayerComponent : SceneComponent<PlayerController>
     private PlayerController playerController;
     protected override PlayerController CreateControllerImpl()
     {
-        playerController = new PlayerController(transform, animator, moveInput, characterController );
+        playerController = new PlayerController(transform, animator, moveInput, lookInput, characterController);
         return playerController;
     }
 
