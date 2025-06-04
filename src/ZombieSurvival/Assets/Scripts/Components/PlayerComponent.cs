@@ -27,7 +27,7 @@ public class PlayerComponent : SceneComponent<PlayerController>
         return playerController;
     }
 
-    void Awake()
+    private void Awake()
     {
         playerController = CreateController();
     }

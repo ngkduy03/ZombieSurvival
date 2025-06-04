@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// Controller for shooting behavior of the player.
 /// </summary>
 public class ShootController : ControllerBase, IAttackController
 {

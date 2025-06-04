@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// 
+/// Controller for player movement and rotation.
 /// </summary>
 public class MoveController : ControllerBase, IMovementController
 {
@@ -19,7 +19,6 @@ public class MoveController : ControllerBase, IMovementController
     private const float walkSpeedAccel = 0.01f;
     private const float walkSpeedAnimationAccel = 1.8f;
     private int velocity;
-    private int state = Animator.StringToHash("State");
 
     public MoveController(
         Transform transform,

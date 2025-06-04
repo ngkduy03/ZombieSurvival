@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// Standard player behavior controller that handles player other controllers.
 /// </summary>
 public class PlayerBehavior : ControllerBase, IPlayerBehavior
 {
@@ -18,9 +18,7 @@ public class PlayerBehavior : ControllerBase, IPlayerBehavior
         this.attackController = attackController;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public void Update()
     {
         movementController.Move();

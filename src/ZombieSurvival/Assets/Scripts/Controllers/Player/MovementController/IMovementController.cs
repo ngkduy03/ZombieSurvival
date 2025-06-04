@@ -7,6 +7,13 @@ using UnityEngine;
 /// </summary>
 public interface IMovementController
 {
+    /// <summary>
+    /// Define movement method.
+    /// </summary>
     void Move();
+
+    /// <summary>
+    /// Define Look method.
+    /// </summary>
     void Look();
 }
