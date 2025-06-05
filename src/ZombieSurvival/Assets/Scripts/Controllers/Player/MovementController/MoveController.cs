@@ -10,8 +10,7 @@ public class MoveController : ControllerBase, IMovementController
 {
     private readonly Transform transform;
     private readonly Animator animator;
-    private readonly InputActionReference moveInput;
-    private readonly InputActionReference lookInput;
+    private readonly InputActionReference[] inputActions;
     private readonly CharacterController characterController;
     private float walkSpeed = 0;
     private float walkAnimationSpeed = 1f;
@@ -23,14 +22,12 @@ public class MoveController : ControllerBase, IMovementController
     public MoveController(
         Transform transform,
         Animator animator,
-        InputActionReference moveInput,
-        InputActionReference lookInput,
+        InputActionReference[] inputActions,
         CharacterController characterController)
     {
         this.transform = transform;
         this.animator = animator;
-        this.moveInput = moveInput;
-        this.lookInput = lookInput;
+        this.inputActions = inputActions;
         this.characterController = characterController;
         velocity = Animator.StringToHash("Velocity");
     }
@@ -40,7 +37,7 @@ public class MoveController : ControllerBase, IMovementController
     /// </summary>
     public void Move()
     {
-        var direction = moveInput.action.ReadValue<Vector2>().normalized;
+        var direction = inputActions[(int)InputActionEnum.Move].action.ReadValue<Vector2>().normalized;
         moveDirection = new Vector3(direction.x, 0, direction.y);
 
         // If the player is moving, set the velocity to the walk speed.
@@ -72,7 +69,7 @@ public class MoveController : ControllerBase, IMovementController
     /// </summary>
     public void Look()
     {
-        var lookDirection = lookInput.action.ReadValue<Vector2>();
+        var lookDirection = inputActions[(int)InputActionEnum.Look].action.ReadValue<Vector2>();
         if (lookDirection.magnitude > 0)
         {
             // Calculate the rotation based on the look direction.

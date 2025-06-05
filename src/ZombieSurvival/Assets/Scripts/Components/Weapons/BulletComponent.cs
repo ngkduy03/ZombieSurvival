@@ -1,0 +1,49 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+
+public class BulletComponent : MonoBehaviour
+{
+    [SerializeField]
+    private float speed;
+
+    /// <summary>
+    /// If the bullet is deactivated or not.
+    /// </summary>
+    public bool IsDeactivated { get; private set; }
+    private CancellationTokenSource cts = new();
+    private const int ExpiredTime = 5;
+
+    private void Start()
+    {
+        ExpireBullet(cts.Token).Forget();
+    }
+
+    private void Update()
+    {
+        ApplySpeedMovement();
+    }
+
+    private async UniTask ExpireBullet(CancellationToken cancellationToken)
+    {
+        await UniTask.WaitForSeconds(ExpiredTime, cancellationToken: cancellationToken);
+        DestroyBullet();
+    }
+
+    private void ApplySpeedMovement()
+    {
+        transform.position += transform.forward * speed * Time.deltaTime;
+    }
+
+    /// <summary>
+    /// Destroy the bullet.
+    /// </summary>
+    public void DestroyBullet()
+    {
+        cts.Cancel();
+        gameObject.SetActive(false);
+        IsDeactivated = true;
+    }
+}
