@@ -7,4 +7,5 @@ using UnityEngine;
 /// </summary>
 public interface IAttackController
 {
+    void Attack();
 }
