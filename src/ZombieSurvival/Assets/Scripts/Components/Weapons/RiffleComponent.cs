@@ -14,16 +14,13 @@ public class RiffleComponent : SceneComponent<RiffleController>
     private Transform bulletSpawnPoint;
 
     [SerializeField]
-    private BulletComponent bulletInstance;
-
-    [SerializeField]
     private Transform poolHolder;
 
     private RiffleController controller;
 
     protected override RiffleController CreateControllerImpl()
     {
-        controller = new RiffleController(gunSetting, bulletSpawnPoint, bulletInstance);
+        controller = new RiffleController(gunSetting, bulletSpawnPoint, poolHolder);
         return controller;
     }
 }

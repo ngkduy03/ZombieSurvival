@@ -13,24 +13,23 @@ public class RiffleController : ControllerBase, IGunController
     private GunSetting gunSetting;
     private int currentAmmo;
     private int totalAmmo;
-    private Transform bulletSpawnPoint;
-    private BulletComponent bulletPrefab;
+    private readonly Transform bulletSpawnPoint;
 
     // Pool ammo.
-    private Transform poolHolder;
+    private readonly Transform poolHolder;
     private Stack<BulletComponent> bulletPool;
     private bool isFiring = false;
 
     public RiffleController(
         GunSetting gunSetting,
         Transform bulletSpawnPoint,
-        BulletComponent bulletPrefab)
+        Transform poolHolder)
     {
         this.gunSetting = gunSetting;
         currentAmmo = this.gunSetting.MagazineSize;
         totalAmmo = this.gunSetting.TotalAmmo;
         this.bulletSpawnPoint = bulletSpawnPoint;
-        this.bulletPrefab = bulletPrefab;
+        this.poolHolder = poolHolder;
     }
 
     public async UniTask FireBullet(CancellationToken cancellationToken)
@@ -65,7 +64,7 @@ public class RiffleController : ControllerBase, IGunController
         }
         else
         {
-            var bulletInstance = Object.Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation, poolHolder);
+            var bulletInstance = Object.Instantiate(gunSetting.BulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation, poolHolder);
             bulletInstance.gameObject.SetActive(true);
             ReloadPoolAmmo(bulletInstance, cancellationToken).Forget();
         }

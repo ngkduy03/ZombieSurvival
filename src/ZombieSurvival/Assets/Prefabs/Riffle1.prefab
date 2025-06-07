@@ -86,10 +86,35 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 33269b2b610f4c245a712795c1927939,
         type: 3}
       propertyPath: m_Name
-      value: assault1
+      value: Riffle1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 33269b2b610f4c245a712795c1927939,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7933145082043241231}
   m_SourcePrefab: {fileID: 100100000, guid: 33269b2b610f4c245a712795c1927939, type: 3}
+--- !u!1 &3449355128807799998 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 33269b2b610f4c245a712795c1927939,
+    type: 3}
+  m_PrefabInstance: {fileID: 2531018485980430831}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7933145082043241231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3449355128807799998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6c1f3efb3e1bc4795d4183729789c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunSetting: {fileID: 11400000, guid: fdfed234d56b268459dc750e300b057d, type: 2}
+  bulletSpawnPoint: {fileID: 0}
+  poolHolder: {fileID: 0}

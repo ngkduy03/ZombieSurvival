@@ -12,12 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b1cce45132cbdd41981998e433d739e, type: 3}
   m_Name: Riffle1
   m_EditorClassIdentifier: 
-  <GunPrefab>k__BackingField: {fileID: 3449355128807799998, guid: b9805254d14d3a54c96e7fa543a07299,
+  <TotalAmmo>k__BackingField: 20
+  <MagazineSize>k__BackingField: 5
+  <ReloadTime>k__BackingField: 2
+  <FireRate>k__BackingField: 0.1
+  <BulletPrefab>k__BackingField: {fileID: 8101565625239212980, guid: 6bfb4b6c1d0715e4c905d404cc517a72,
     type: 3}
-  <TotalAmmo>k__BackingField: 0
-  <MagazineSize>k__BackingField: 0
-  <ReloadTime>k__BackingField: 0
-  <FireRate>k__BackingField: 0
-  <BulletSpeed>k__BackingField: 0
-  <BulletDamage>k__BackingField: 0
-  <LifeSpan>k__BackingField: 0

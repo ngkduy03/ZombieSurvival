@@ -19,10 +19,7 @@ public class PlayerComponent : SceneComponent<PlayerController>
     private InputActionReference[] inputActions;
 
     [SerializeField]
-    private Button fireButton;
-
-    [SerializeField]
-    private Transform bulletSpawnPoint;
+    private FireButton fireButton;
 
     [SerializeField]
     private RiffleComponent riffleComponent;
@@ -32,6 +29,7 @@ public class PlayerComponent : SceneComponent<PlayerController>
 
     private List<IGunController> gunControllers = new List<IGunController>();
     private PlayerController playerController;
+
     protected override PlayerController CreateControllerImpl()
     {
         var riffleController = riffleComponent.CreateController();
@@ -39,7 +37,7 @@ public class PlayerComponent : SceneComponent<PlayerController>
         gunControllers.Add(riffleController);
         gunControllers.Add(shotgunController);
 
-        playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, fireButton, bulletSpawnPoint);
+        playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, fireButton);
         return playerController;
     }
 

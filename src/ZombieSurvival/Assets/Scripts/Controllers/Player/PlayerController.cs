@@ -14,8 +14,7 @@ public class PlayerController : IController
     private readonly InputActionReference[] inputActions;
     private readonly CharacterController characterController;
     private readonly List<IGunController> gunControllers;
-    private readonly Button fireButton;
-    private readonly Transform bulletSpawnPoint;
+    private readonly FireButton fireButton;
     private IAttackController attackController;
     private IMovementController movementController;
     private IPlayerBehavior playerBehavior;
@@ -26,8 +25,7 @@ public class PlayerController : IController
         InputActionReference[] inputActions,
         CharacterController characterController,
         List<IGunController> gunControllers,
-        Button fireButton,
-        Transform bulletSpawnPoint)
+        FireButton fireButton)
     {
         this.transform = transform;
         this.animator = animator;
@@ -35,7 +33,6 @@ public class PlayerController : IController
         this.characterController = characterController;
         this.gunControllers = gunControllers;
         this.fireButton = fireButton;
-        this.bulletSpawnPoint = bulletSpawnPoint;
 
         Initialize();
     }
@@ -43,7 +40,7 @@ public class PlayerController : IController
     private void Initialize()
     {
         movementController = new MoveController(transform, animator, inputActions, characterController);
-        attackController = new FireBulletController(animator, bulletSpawnPoint, gunControllers, fireButton);
+        attackController = new FireBulletController(animator, gunControllers, fireButton);
         playerBehavior = new PlayerBehavior(movementController, attackController);
 
     }
