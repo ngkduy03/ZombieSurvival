@@ -22,6 +22,12 @@ public class PlayerComponent : SceneComponent<PlayerController>
     private FireButton fireButton;
 
     [SerializeField]
+    private Button switchGunButton;
+
+    [SerializeField]
+    private Button reloadButton;
+
+    [SerializeField]
     private RiffleComponent riffleComponent;
 
     [SerializeField]
@@ -37,7 +43,8 @@ public class PlayerComponent : SceneComponent<PlayerController>
         gunControllers.Add(riffleController);
         gunControllers.Add(shotgunController);
 
-        playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, fireButton);
+        playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, fireButton, switchGunButton, reloadButton);
+        playerController.Initialize();
         return playerController;
     }
 

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -21,5 +20,14 @@ public class GunSetting : ScriptableObject
     public float FireRate { get; private set; }
 
     [field: SerializeField]
+    public LayerMask EnemyMask { get; private set; }
+
+    [field: SerializeField, Header("Riffle")]
     public BulletComponent BulletPrefab { get; private set; }
+
+    [field: SerializeField, Header("Shotgun")]
+    public float SpreadAngle { get; private set; }
+
+    [field: SerializeField]
+    public float Radius { get; private set; }
 }

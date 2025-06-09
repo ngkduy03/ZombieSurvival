@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -10,7 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class FireBulletController : ControllerBase, IAttackController
 {
-    private readonly Animator animator;
+    private readonly Animator animator; //TODO: 2 layer animator.
     private List<IGunController> gunControllers = new List<IGunController>();
     private FireButton fireButton;
     private Button switchGunButton;
@@ -22,20 +21,26 @@ public class FireBulletController : ControllerBase, IAttackController
     public FireBulletController(
         Animator animator,
         List<IGunController> gunControllers,
-        FireButton fireButton)
+        FireButton fireButton,
+        Button switchGunButton,
+        Button reloadButton)
 
     {
         this.animator = animator;
         this.gunControllers = gunControllers;
         this.fireButton = fireButton;
+        this.switchGunButton = switchGunButton;
+        this.reloadButton = reloadButton;
+        Initialize();
     }
 
-    public void Initialize()
+    private void Initialize()
     {
         Subscribe();
         if (gunControllers.Count > 0)
         {
             currentGunController = gunControllers[0];
+            currentGunController.SetActive(true);
         }
         else
         {
@@ -46,21 +51,23 @@ public class FireBulletController : ControllerBase, IAttackController
     private void Subscribe()
     {
         fireButton.FireButtonPressed += OnAttack;
-        switchGunButton.onClick.AddListener(SwitchGun);
+        switchGunButton.onClick.AddListener(OnFunSwitched);
         reloadButton.onClick.AddListener(OnReload);
     }
 
     private void Unsubscribe()
     {
         fireButton.FireButtonPressed -= OnAttack;
-        switchGunButton.onClick.RemoveListener(SwitchGun);
+        switchGunButton.onClick.RemoveListener(OnFunSwitched);
         reloadButton.onClick.RemoveListener(OnReload);
     }
 
-    private void SwitchGun()
+    private void OnFunSwitched()
     {
         gunIndex++;
+        currentGunController.SetActive(false);
         currentGunController = gunControllers[gunIndex % gunControllers.Count];
+        currentGunController.SetActive(true);
     }
 
     public void OnAttack()

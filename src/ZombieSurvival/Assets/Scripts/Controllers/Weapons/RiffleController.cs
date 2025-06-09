@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// RiffleController is responsible for managing the riffle weapon's behavior.
 /// </summary>
 public class RiffleController : ControllerBase, IGunController
 {
+    private Transform transform;
     private GunSetting gunSetting;
     private int currentAmmo;
     private int totalAmmo;
@@ -17,14 +17,17 @@ public class RiffleController : ControllerBase, IGunController
 
     // Pool ammo.
     private readonly Transform poolHolder;
-    private Stack<BulletComponent> bulletPool;
+    private Stack<BulletComponent> bulletPool = new();
     private bool isFiring = false;
+    private bool isReloaded = false;
 
     public RiffleController(
+        Transform transform,
         GunSetting gunSetting,
         Transform bulletSpawnPoint,
         Transform poolHolder)
     {
+        this.transform = transform;
         this.gunSetting = gunSetting;
         currentAmmo = this.gunSetting.MagazineSize;
         totalAmmo = this.gunSetting.TotalAmmo;
@@ -32,16 +35,18 @@ public class RiffleController : ControllerBase, IGunController
         this.poolHolder = poolHolder;
     }
 
+    /// <inheritdoc/>
     public async UniTask FireBullet(CancellationToken cancellationToken)
     {
-        if (isFiring)
+        Debug.Log("Attempting to fire bullet");
+        if (isFiring || totalAmmo <= 0 || isReloaded)
         {
             return;
         }
 
         isFiring = true;
         Debug.Log("Firing bullet");
-        if (currentAmmo <= 0)
+        if (currentAmmo < 0)
         {
             await ReloadAsync(cancellationToken);
         }
@@ -73,11 +78,14 @@ public class RiffleController : ControllerBase, IGunController
     private async UniTask ReloadPoolAmmo(BulletComponent bullet, CancellationToken cancellationToken)
     {
         await UniTask.WaitUntil(() => bullet.IsDeactivated, cancellationToken: cancellationToken);
+        bullet.IsDeactivated = false;
         bulletPool.Push(bullet);
     }
 
+    /// <inheritdoc/>
     public async UniTask ReloadAsync(CancellationToken cancellationToken)
     {
+        Debug.Log("Attempting to reload");
         int needed = gunSetting.MagazineSize - currentAmmo;
         int reloadAmount = System.Math.Min(needed, totalAmmo);
 
@@ -85,9 +93,15 @@ public class RiffleController : ControllerBase, IGunController
         {
             return;
         }
-
+        isReloaded = true;
         await UniTask.Delay((int)(gunSetting.ReloadTime * 1000), cancellationToken: cancellationToken);
         currentAmmo += reloadAmount;
         totalAmmo -= reloadAmount;
+        isReloaded = false;
+    }
+
+    public void SetActive(bool isActive)
+    {
+        transform.gameObject.SetActive(isActive);
     }
 }

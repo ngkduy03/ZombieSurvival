@@ -15,4 +15,10 @@ public interface IGunController
     /// Reloads the gun's ammo.
     /// </summary> 
     UniTask ReloadAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Checks if the gun is ready to fire.
+    /// </summary>
+    /// <param name="isActive"></param>
+    void SetActive(bool isActive);
 }

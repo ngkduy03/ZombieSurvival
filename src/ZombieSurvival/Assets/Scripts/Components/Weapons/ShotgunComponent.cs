@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 /// <summary>
@@ -9,18 +10,17 @@ using UnityEngine;
 public class ShotgunComponent : SceneComponent<ShotgunController>
 {
     [SerializeField]
+    [Expandable]
     private GunSetting gunSetting;
 
     [SerializeField]
     private Transform pelletSpawnPoint;
-    [SerializeField]
-    private LayerMask enemyMask;
 
     private ShotgunController controller;
 
     protected override ShotgunController CreateControllerImpl()
     {
-        controller = new ShotgunController(gunSetting, pelletSpawnPoint, enemyMask);
+        controller = new ShotgunController(transform, gunSetting, pelletSpawnPoint);
         return controller;
     }
 
