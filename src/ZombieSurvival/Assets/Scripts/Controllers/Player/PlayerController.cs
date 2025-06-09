@@ -15,6 +15,8 @@ public class PlayerController : IController
     private readonly CharacterController characterController;
     private readonly List<IGunController> gunControllers;
     private readonly FireButton fireButton;
+    private readonly Button switchGunButton;
+    private readonly Button reloadButton;
     private IAttackController attackController;
     private IMovementController movementController;
     private IPlayerBehavior playerBehavior;
@@ -25,7 +27,9 @@ public class PlayerController : IController
         InputActionReference[] inputActions,
         CharacterController characterController,
         List<IGunController> gunControllers,
-        FireButton fireButton)
+        FireButton fireButton,
+        Button switchGunButton,
+        Button reloadButton)
     {
         this.transform = transform;
         this.animator = animator;
@@ -33,18 +37,24 @@ public class PlayerController : IController
         this.characterController = characterController;
         this.gunControllers = gunControllers;
         this.fireButton = fireButton;
-
-        Initialize();
+        this.switchGunButton = switchGunButton;
+        this.reloadButton = reloadButton;
     }
 
-    private void Initialize()
+    /// <summary>
+    /// Initializes the player controller by setting up movement and attack controllers,
+    /// </summary>
+    public void Initialize()
     {
         movementController = new MoveController(transform, animator, inputActions, characterController);
-        attackController = new FireBulletController(animator, gunControllers, fireButton);
+        attackController = new FireBulletController(animator, gunControllers, fireButton, switchGunButton, reloadButton);
         playerBehavior = new PlayerBehavior(movementController, attackController);
 
     }
 
+    /// <summary>
+    /// Updates the player behavior, which includes movement and attack actions.
+    /// </summary>
     public void Update()
     {
         playerBehavior.Update();

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 /// <summary>
@@ -9,7 +10,9 @@ using UnityEngine;
 public class RiffleComponent : SceneComponent<RiffleController>
 {
     [SerializeField]
+    [Expandable]
     private GunSetting gunSetting;
+
     [SerializeField]
     private Transform bulletSpawnPoint;
 
@@ -20,7 +23,7 @@ public class RiffleComponent : SceneComponent<RiffleController>
 
     protected override RiffleController CreateControllerImpl()
     {
-        controller = new RiffleController(gunSetting, bulletSpawnPoint, poolHolder);
+        controller = new RiffleController(transform, gunSetting, bulletSpawnPoint, poolHolder);
         return controller;
     }
 }

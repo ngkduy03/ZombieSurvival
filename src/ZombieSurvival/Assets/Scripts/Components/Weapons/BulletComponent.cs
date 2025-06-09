@@ -4,6 +4,10 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// BulletComponent is a component that manages the behavior of a bullet in the game.
+/// It handles the bullet's movement, expiration, and deactivation.
+/// </summary>
 public class BulletComponent : MonoBehaviour
 {
     [SerializeField]
@@ -12,11 +16,11 @@ public class BulletComponent : MonoBehaviour
     /// <summary>
     /// If the bullet is deactivated or not.
     /// </summary>
-    public bool IsDeactivated { get; private set; }
+    public bool IsDeactivated { get; set; }
     private CancellationTokenSource cts = new();
     private const int ExpiredTime = 5;
 
-    private void Start()
+    private void OnEnable()
     {
         ExpireBullet(cts.Token).Forget();
     }
@@ -43,6 +47,8 @@ public class BulletComponent : MonoBehaviour
     public void DestroyBullet()
     {
         cts.Cancel();
+        cts.Dispose();
+        cts = new CancellationTokenSource();
         gameObject.SetActive(false);
         IsDeactivated = true;
     }

@@ -7,38 +7,45 @@ using UnityEngine;
 
 public class ShotgunController : ControllerBase, IGunController
 {
+    private Transform transform;
     private GunSetting gunSetting;
     private int currentAmmo;
     private int totalAmmo;
     private Transform pelletSpawnPoint;
-    private float spreadAngle = 15f;
-    private float range = 2f;
+
+    // The angle of spread for the shotgun pellets.
+    private float spreadAngle;
+    private float radius;
     private LayerMask enemyMask;
-    private Collider[] enemyRangeChecks = new Collider[100];
+    private Collider[] enemyRangeChecks = new Collider[200];
     private bool isFiring = false;
+    private bool isReloaded = false;
 
     public ShotgunController(
+        Transform transform,
         GunSetting gunSetting,
-        Transform pelletSpawnPoint,
-        LayerMask enemyMask)
+        Transform pelletSpawnPoint)
     {
+        this.transform = transform;
         this.gunSetting = gunSetting;
         this.pelletSpawnPoint = pelletSpawnPoint;
-        this.enemyMask = enemyMask;
         currentAmmo = this.gunSetting.MagazineSize;
         totalAmmo = this.gunSetting.TotalAmmo;
+        spreadAngle = this.gunSetting.SpreadAngle;
+        radius = this.gunSetting.Radius;
+        enemyMask = this.gunSetting.EnemyMask;
     }
 
     public void FireBullet()
     {
-        if (currentAmmo <= 0)
+        if (isFiring || totalAmmo <= 0 || isReloaded)
             return;
         currentAmmo--;
     }
 
     private void CheckInRange()
     {
-        var enemyAmount = Physics.OverlapSphereNonAlloc(pelletSpawnPoint.position, range, enemyRangeChecks, enemyMask, QueryTriggerInteraction.Collide);
+        var enemyAmount = Physics.OverlapSphereNonAlloc(pelletSpawnPoint.position, radius, enemyRangeChecks, enemyMask, QueryTriggerInteraction.Collide);
 
         if (enemyAmount > 0)
         {
@@ -47,7 +54,7 @@ public class ShotgunController : ControllerBase, IGunController
                 var enemy = enemyRangeChecks[i];
 
                 if (enemy == null)
-                    continue;
+                    break;
 
                 var enemyPos = enemyRangeChecks[0].transform.position;
 
@@ -56,6 +63,7 @@ public class ShotgunController : ControllerBase, IGunController
                 if (Vector3.Angle(pelletSpawnPoint.position, enemyPos) < spreadAngle / 2f)
                 {
                     //TODO: Implement damage logic here
+                    Debug.Log("Hit enemy");
                 }
             }
         }
@@ -63,16 +71,18 @@ public class ShotgunController : ControllerBase, IGunController
         Array.Clear(enemyRangeChecks, 0, enemyRangeChecks.Length);
     }
 
+    /// <inheritdoc/>
     public async UniTask FireBullet(CancellationToken cancellationToken)
     {
-        if (isFiring)
+        Debug.Log("Attempting to fire bullet");
+        if (isFiring || totalAmmo <= 0 || isReloaded)
         {
             return;
         }
 
         isFiring = true;
         Debug.Log("Firing pellet");
-        if (currentAmmo <= 0)
+        if (currentAmmo < 0)
         {
             await ReloadAsync(cancellationToken);
         }
@@ -84,8 +94,10 @@ public class ShotgunController : ControllerBase, IGunController
 
     }
 
+    /// <inheritdoc/>
     public async UniTask ReloadAsync(CancellationToken cancellationToken)
     {
+        Debug.Log("Attempting to reload");
         int needed = gunSetting.MagazineSize - currentAmmo;
         int reloadAmount = System.Math.Min(needed, totalAmmo);
 
@@ -97,5 +109,11 @@ public class ShotgunController : ControllerBase, IGunController
         await UniTask.Delay((int)(gunSetting.ReloadTime * 1000), cancellationToken: cancellationToken);
         currentAmmo += reloadAmount;
         totalAmmo -= reloadAmount;
+        isReloaded = false;
+    }
+
+    public void SetActive(bool isActive)
+    {
+        transform.gameObject.SetActive(isActive);
     }
 }
