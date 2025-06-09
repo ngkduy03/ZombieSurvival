@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Interface for player behavior.
 /// </summary>
-public interface IPlayerBehavior
+public interface IBehavior
 {
     /// <summary>
     /// Updates the player behavior.

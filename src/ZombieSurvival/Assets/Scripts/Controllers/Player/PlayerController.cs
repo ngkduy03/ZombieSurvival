@@ -19,7 +19,7 @@ public class PlayerController : IController
     private readonly Button reloadButton;
     private IAttackController attackController;
     private IMovementController movementController;
-    private IPlayerBehavior playerBehavior;
+    private IBehavior playerBehavior;
 
     public PlayerController(
         Transform transform,

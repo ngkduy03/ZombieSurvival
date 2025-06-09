@@ -15,6 +15,11 @@ MonoBehaviour:
   <TotalAmmo>k__BackingField: 50
   <MagazineSize>k__BackingField: 10
   <ReloadTime>k__BackingField: 2
-  <FireRate>k__BackingField: 0.1
+  <FireRate>k__BackingField: 0.2
+  <EnemyMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
   <BulletPrefab>k__BackingField: {fileID: 8101565625239212980, guid: 6bfb4b6c1d0715e4c905d404cc517a72,
     type: 3}
+  <SpreadAngle>k__BackingField: 0
+  <Radius>k__BackingField: 0

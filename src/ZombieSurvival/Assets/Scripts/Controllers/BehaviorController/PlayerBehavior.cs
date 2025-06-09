@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Standard player behavior controller that handles player other controllers.
 /// </summary>
-public class PlayerBehavior : ControllerBase, IPlayerBehavior
+public class PlayerBehavior : ControllerBase, IBehavior
 {
     private IMovementController movementController;
     private IAttackController attackController;

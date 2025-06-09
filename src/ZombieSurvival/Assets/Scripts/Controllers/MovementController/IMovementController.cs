@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// Interface for movement controllers. 
 /// </summary>
 public interface IMovementController
 {

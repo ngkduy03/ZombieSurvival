@@ -9,6 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class FireBulletController : ControllerBase, IAttackController
 {
+    private const int FiredPerSec = 1;
     private readonly Animator animator; //TODO: 2 layer animator.
     private List<IGunController> gunControllers = new List<IGunController>();
     private FireButton fireButton;
@@ -51,28 +52,43 @@ public class FireBulletController : ControllerBase, IAttackController
     private void Subscribe()
     {
         fireButton.FireButtonPressed += OnAttack;
-        switchGunButton.onClick.AddListener(OnFunSwitched);
+        switchGunButton.onClick.AddListener(OnGunSwitched);
         reloadButton.onClick.AddListener(OnReload);
     }
 
     private void Unsubscribe()
     {
         fireButton.FireButtonPressed -= OnAttack;
-        switchGunButton.onClick.RemoveListener(OnFunSwitched);
+        switchGunButton.onClick.RemoveListener(OnGunSwitched);
         reloadButton.onClick.RemoveListener(OnReload);
     }
 
-    private void OnFunSwitched()
+    private void OnGunSwitched()
     {
         gunIndex++;
         currentGunController.SetActive(false);
         currentGunController = gunControllers[gunIndex % gunControllers.Count];
         currentGunController.SetActive(true);
+        animator.SetFloat("FireRate", FiredPerSec / currentGunController.GunSetting.FireRate);
     }
 
-    public void OnAttack()
+    /// <inheritdoc/>
+    public void OnAttack(bool isPressed)
     {
-        currentGunController.FireBullet(cts.Token);
+        var shootLayer = (int)PlayerAnimationLayerEnum.SHootLayer;
+
+        if (isPressed && !currentGunController.IsReloaded())
+        {
+            if (currentGunController.CanFire())
+            {
+                currentGunController.FireBullet(cts.Token);
+                animator.SetLayerWeight(shootLayer, 1f);
+            }
+        }
+        else
+        {
+            animator.SetLayerWeight(shootLayer, 0f);
+        }
     }
 
     private void OnReload()

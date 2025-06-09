@@ -8,5 +8,9 @@ using UnityEngine.EventSystems;
 /// </summary>
 public interface IAttackController
 {
-    void OnAttack();
+    /// <summary>
+    /// Handles the attack action.
+    /// </summary>
+    /// <param name="isAttacking"></param>
+    void OnAttack(bool isAttacking);
 }

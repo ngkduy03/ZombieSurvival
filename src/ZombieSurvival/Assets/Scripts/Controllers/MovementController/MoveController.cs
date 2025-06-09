@@ -61,7 +61,7 @@ public class MoveController : ControllerBase, IMovementController
         animator.SetFloat(velocity, walkAnimationSpeed);
 
         // Move the character controller.
-        characterController.Move(moveDirection * walkSpeed * Time.deltaTime);
+        characterController.SimpleMove(moveDirection * walkSpeed);
     }
 
     /// <summary>

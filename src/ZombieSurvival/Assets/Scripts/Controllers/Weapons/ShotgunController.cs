@@ -9,6 +9,7 @@ public class ShotgunController : ControllerBase, IGunController
 {
     private Transform transform;
     private GunSetting gunSetting;
+    public GunSetting GunSetting => gunSetting;
     private int currentAmmo;
     private int totalAmmo;
     private Transform pelletSpawnPoint;
@@ -34,13 +35,6 @@ public class ShotgunController : ControllerBase, IGunController
         spreadAngle = this.gunSetting.SpreadAngle;
         radius = this.gunSetting.Radius;
         enemyMask = this.gunSetting.EnemyMask;
-    }
-
-    public void FireBullet()
-    {
-        if (isFiring || totalAmmo <= 0 || isReloaded)
-            return;
-        currentAmmo--;
     }
 
     private void CheckInRange()
@@ -115,5 +109,15 @@ public class ShotgunController : ControllerBase, IGunController
     public void SetActive(bool isActive)
     {
         transform.gameObject.SetActive(isActive);
+    }
+
+    public bool CanFire()
+    {
+        return !(totalAmmo <= 0 || isFiring);
+    }
+
+    public bool IsReloaded()
+    {
+        return isReloaded;
     }
 }
