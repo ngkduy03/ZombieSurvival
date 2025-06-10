@@ -21,7 +21,7 @@ public class PlayerBehavior : ControllerBase, IBehavior
     /// <inheritdoc />
     public void Update()
     {
-        movementController.Move();
-        movementController.Look();
+        movementController?.Move();
+        movementController?.Look();
     }
 }
