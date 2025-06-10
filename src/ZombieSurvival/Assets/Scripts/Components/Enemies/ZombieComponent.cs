@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,15 +13,18 @@ public class ZombieComponent : SceneComponent<ZombieController>
     private List<Transform> patrol;
 
     [SerializeField]
+    [Expandable]
     private ZombieSetting zombieSetting;
 
     [SerializeField]
-    private LayerMask playerMask;
     private Animator animator;
+
+    [SerializeField]
     private NavMeshAgent navMeshAgent;
+
     private Transform zombieTransform;
     private ZombieController zombieController;
-    
+
     protected override ZombieController CreateControllerImpl()
     {
         animator = GetComponent<Animator>();
@@ -31,9 +35,19 @@ public class ZombieComponent : SceneComponent<ZombieController>
             navMeshAgent,
             patrol,
             zombieSetting,
-            zombieTransform,
-            playerMask
-        );
+            zombieTransform);
+
+        zombieController.Initialize();
         return zombieController;
+    }
+
+    private void Awake()
+    {
+        zombieController = CreateController();
+    }
+
+    private void Update()
+    {
+        zombieController?.Update();
     }
 }

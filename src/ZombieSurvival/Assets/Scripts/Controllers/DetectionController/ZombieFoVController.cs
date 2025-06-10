@@ -9,28 +9,16 @@ public class ZombieFoVController : ControllerBase, IDetectionController
     private float radius;
     private LayerMask playerMask;
     private Collider[] playerCheck = new Collider[1];
+    private Vector3 centerPos => transform.position + Vector3.up * 1f;
 
     public ZombieFoVController(
         Transform transform,
-        float spreadAngle,
-        float radius,
-        LayerMask playerMask)
-    {
-        this.transform = transform;
-        this.spreadAngle = spreadAngle;
-        this.radius = radius;
-        this.playerMask = playerMask;
-    }
-
-    public ZombieFoVController(
-        Transform transform,
-        ZombieSetting zombieSetting,
-        LayerMask playerMask)
+        ZombieSetting zombieSetting)
     {
         this.transform = transform;
         spreadAngle = zombieSetting.SpreadAngle;
         radius = zombieSetting.Radius;
-        this.playerMask = playerMask;
+        playerMask = zombieSetting.PlayerMask;
     }
 
     /// <inheritdoc />
@@ -56,11 +44,11 @@ public class ZombieFoVController : ControllerBase, IDetectionController
     /// <inheritdoc />
     public Transform GetPlayerTransform()
     {
-        if (Physics.OverlapSphereNonAlloc(transform.position, radius, playerCheck, playerMask, QueryTriggerInteraction.Collide) > 0)
+        if (Physics.OverlapSphereNonAlloc(centerPos, radius, playerCheck, playerMask, QueryTriggerInteraction.Collide) > 0)
         {
             if (playerCheck[0].TryGetComponent<PlayerComponent>(out var playerComponent))
             {
-                return playerCheck[0].transform;
+                return playerComponent.transform;
             }
         }
 

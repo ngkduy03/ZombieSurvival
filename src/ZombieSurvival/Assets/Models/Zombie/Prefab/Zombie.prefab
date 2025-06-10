@@ -82,6 +82,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65925f6c6db7ca5449603a5bbfb844d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patrol:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  zombieSetting: {fileID: 11400000, guid: 61f0f96925f109643aa918b39da963ff, type: 2}
+  animator: {fileID: 6672838614710946233}
+  navMeshAgent: {fileID: 5360089802026714620}
 --- !u!95 &6672838614710946233
 Animator:
   serializedVersion: 5
@@ -90,7 +98,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 85941289338964345}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 3ea946212e7416c4f8a3e7a404166265, type: 3}
   m_Controller: {fileID: 9100000, guid: 2ef8e6599b7f9934e8ff0d64c5325a1f, type: 2}
   m_CullingMode: 1
@@ -142,10 +150,10 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 150
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0

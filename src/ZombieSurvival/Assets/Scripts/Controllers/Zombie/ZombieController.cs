@@ -15,8 +15,7 @@ public class ZombieController : ControllerBase
     private NavMeshAgent navMeshAgent;
     private List<Transform> patrol;
     private ZombieSetting zombieSetting;
-    private Transform zombieTransform;   
-     private LayerMask playerMask;
+    private Transform zombieTransform;
     private int health;
     
     public ZombieController(
@@ -24,27 +23,26 @@ public class ZombieController : ControllerBase
         NavMeshAgent navMeshAgent,
         List<Transform> patrol,
         ZombieSetting zombieSetting,
-        Transform zombieTransform,
-        LayerMask playerMask)
+        Transform zombieTransform)
     {
         this.animator = animator;
         this.navMeshAgent = navMeshAgent;
         this.patrol = patrol;
         this.zombieSetting = zombieSetting;
         this.zombieTransform = zombieTransform;
-        this.playerMask = playerMask;        this.health = 100;
     }
     
     public void Initialize()
     {
         movementController = new ZombieMovementController(animator, navMeshAgent, patrol, zombieSetting);
         attackController = new ZombieAttackController();
-        detectionController = new ZombieFoVController(zombieTransform, zombieSetting, playerMask);
+        detectionController = new ZombieFoVController(zombieTransform, zombieSetting);
         zombieBehavior = new ZombieBehavior(movementController, attackController, detectionController);
     }
 
+    /// <inheritdoc/>
     public void Update()
     {
-        zombieBehavior.Update();
+        zombieBehavior?.Update();
     }
 }

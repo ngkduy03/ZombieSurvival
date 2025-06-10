@@ -38,7 +38,8 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
         agent.speed = zombieSetting.WalkSpeed;
         agent.acceleration = zombieSetting.WalkAcceleration;
         agent.stoppingDistance = zombieSetting.StopDistance;
-        currDestination = patrol.Count > 0 ? patrol[0] : null;
+        var patrolIndex = Random.Range(0, patrol.Count);
+        currDestination = patrol.Count > 0 ? patrol[patrolIndex] : null;
         agent.SetDestination(currDestination.position);
     }
 
@@ -74,12 +75,12 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
     /// <inheritdoc />
     public async UniTask ChasePlayer(Transform target, CancellationToken cancellationToken)
     {
-        if (isResetUpdatePath)
+        if (isResetUpdatePath || agent.pathStatus == NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance)
             return;
 
         isResetUpdatePath = true;
-        await UniTask.WaitForSeconds(UpdatePathCoolDown, cancellationToken: cancellationToken);
         agent.SetDestination(target.position);
+        await UniTask.WaitForSeconds(UpdatePathCoolDown, cancellationToken: cancellationToken);
         isResetUpdatePath = false;
     }
 }

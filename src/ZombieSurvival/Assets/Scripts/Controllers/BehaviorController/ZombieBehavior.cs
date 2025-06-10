@@ -11,7 +11,7 @@ public class ZombieBehavior : ControllerBase, IBehavior
     private IZombieMovementController movementController;
     private IAttackController attackController;
     private IDetectionController detectionController;
-    private CancellationTokenSource chasingCTS;
+    private CancellationTokenSource chasingCTS = new();
 
     public ZombieBehavior(
         IZombieMovementController movementController,
@@ -31,14 +31,12 @@ public class ZombieBehavior : ControllerBase, IBehavior
             Transform playerTransform = detectionController.GetPlayerTransform();
             if (playerTransform != null)
             {
+                Debug.Log("Zombie detected player: ");
                 movementController.ChasePlayer(playerTransform, chasingCTS.Token);
             }
         }
         else
         {
-            chasingCTS?.Cancel();
-            chasingCTS?.Dispose();
-            chasingCTS = new CancellationTokenSource();
             movementController.MoveOnPatrol();
         }
     }
