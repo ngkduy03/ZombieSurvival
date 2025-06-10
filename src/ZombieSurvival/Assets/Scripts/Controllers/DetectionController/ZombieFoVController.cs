@@ -22,6 +22,17 @@ public class ZombieFoVController : ControllerBase, IDetectionController
         this.playerMask = playerMask;
     }
 
+    public ZombieFoVController(
+        Transform transform,
+        ZombieSetting zombieSetting,
+        LayerMask playerMask)
+    {
+        this.transform = transform;
+        spreadAngle = zombieSetting.SpreadAngle;
+        radius = zombieSetting.Radius;
+        this.playerMask = playerMask;
+    }
+
     /// <inheritdoc />
     public bool CheckInRange()
     {
