@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Interface for player behavior.
 /// </summary>
-public interface IBehavior
+public interface IBehavior : IController
 {
     /// <summary>
     /// Updates the player behavior.

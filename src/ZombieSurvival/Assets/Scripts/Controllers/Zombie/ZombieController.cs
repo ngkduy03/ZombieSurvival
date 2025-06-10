@@ -18,10 +18,10 @@ public class ZombieController : ControllerBase
 
     public void Initialize()
     {
-        movementController = new ZombieMovementController();
-        attackController = new ZombieAttackController();
-        detectionController = new ZombieFoVController();
-        zombieBehavior = new ZombieBehavior(movementController, attackController, detectionController);
+        // movementController = new ZombieMovementController();
+        // attackController = new ZombieAttackController();
+        // detectionController = new ZombieFoVController();
+        // zombieBehavior = new ZombieBehavior(movementController, attackController, detectionController);
     }
 
     public void Update()

@@ -57,7 +57,7 @@ public class PlayerController : IController
     /// </summary>
     public void Update()
     {
-        playerBehavior.Update();
+        playerBehavior?.Update();
     }
 
     public void Dispose()

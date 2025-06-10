@@ -30,6 +30,7 @@ public class MoveController : ControllerBase, IMovementController
         this.inputActions = inputActions;
         this.characterController = characterController;
         velocity = Animator.StringToHash("Velocity");
+
     }
 
     /// <summary>

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// Interface for the attack controller.
 /// </summary>
-public interface IAttackController
+public interface IAttackController : IController
 {
     /// <summary>
     /// Handles the attack action.

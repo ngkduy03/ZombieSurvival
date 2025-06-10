@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -7,12 +8,13 @@ using UnityEngine;
 /// </summary>
 public class ZombieBehavior : ControllerBase, IBehavior
 {
-    private IMovementController movementController;
+    private IZombieMovementController movementController;
     private IAttackController attackController;
     private IDetectionController detectionController;
+    private CancellationTokenSource chasingCTS;
 
     public ZombieBehavior(
-        IMovementController movementController,
+        IZombieMovementController movementController,
         IAttackController attackController,
         IDetectionController detectionController)
     {
@@ -21,9 +23,23 @@ public class ZombieBehavior : ControllerBase, IBehavior
         this.detectionController = detectionController;
     }
 
+    /// <inheritdoc />
     public void Update()
     {
-        movementController.Move();
-        movementController.Look();
+        if (detectionController.CheckInRange())
+        {
+            Transform playerTransform = detectionController.GetPlayerTransform();
+            if (playerTransform != null)
+            {
+                movementController.ChasePlayer(playerTransform, chasingCTS.Token);
+            }
+        }
+        else
+        {
+            chasingCTS?.Cancel();
+            chasingCTS?.Dispose();
+            chasingCTS = new CancellationTokenSource();
+            movementController.MoveOnPatrol();
+        }
     }
 }

@@ -51,10 +51,11 @@ public class ShotgunController : ControllerBase, IGunController
                     break;
 
                 var enemyPos = enemyRangeChecks[0].transform.position;
+                enemyPos.y = 0;
 
                 // Check if the enemy is within the spread angle of the shotgun
                 // This assumes pelletSpawnPoint.forward is the direction the shotgun is facing
-                if (Vector3.Angle(pelletSpawnPoint.position, enemyPos) < spreadAngle / 2f)
+                if (Vector3.Angle(pelletSpawnPoint.forward, enemyPos) < spreadAngle / 2f)
                 {
                     //TODO: Implement damage logic here
                     Debug.Log("Hit enemy");
