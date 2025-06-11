@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ZombieFoVController class implements the IDetectionController interface for zombie field of view detection.
+/// </summary>
 public class ZombieFoVController : ControllerBase, IDetectionController
 {
     private Transform transform;
@@ -24,7 +27,7 @@ public class ZombieFoVController : ControllerBase, IDetectionController
     /// <inheritdoc />
     public bool CheckInRange()
     {
-        var playerTransform = GetPlayerTransform();
+        var playerTransform = GetTargetTransform();
 
         if (playerTransform == null)
         {
@@ -42,7 +45,7 @@ public class ZombieFoVController : ControllerBase, IDetectionController
     }
 
     /// <inheritdoc />
-    public Transform GetPlayerTransform()
+    public Transform GetTargetTransform()
     {
         if (Physics.OverlapSphereNonAlloc(centerPos, radius, playerCheck, playerMask, QueryTriggerInteraction.Collide) > 0)
         {

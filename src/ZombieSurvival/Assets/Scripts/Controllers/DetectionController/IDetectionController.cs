@@ -12,10 +12,10 @@ public interface IDetectionController : IController
     /// </summary>
     /// <returns></returns>
     bool CheckInRange();
-    
+
     /// <summary>
     /// Gets the transform of the player if detected within range.
     /// </summary>
     /// <returns></returns>
-    Transform GetPlayerTransform();
+    Transform GetTargetTransform();
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,7 +11,7 @@ using UnityEngine.UI;
 public class FireBulletController : ControllerBase, IAttackController
 {
     private const int FiredPerSec = 1;
-    private readonly Animator animator; //TODO: 2 layer animator.
+    private readonly Animator animator;
     private List<IGunController> gunControllers = new List<IGunController>();
     private FireButton fireButton;
     private Button switchGunButton;
@@ -32,10 +33,9 @@ public class FireBulletController : ControllerBase, IAttackController
         this.fireButton = fireButton;
         this.switchGunButton = switchGunButton;
         this.reloadButton = reloadButton;
-        Initialize();
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         Subscribe();
         if (gunControllers.Count > 0)
@@ -103,6 +103,7 @@ public class FireBulletController : ControllerBase, IAttackController
             Unsubscribe();
             cts?.Cancel();
             cts?.Dispose();
+            GC.SuppressFinalize(this);
         }
         base.Dispose(disposing);
     }

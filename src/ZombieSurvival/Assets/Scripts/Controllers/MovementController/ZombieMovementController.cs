@@ -17,8 +17,10 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
     private Transform currDestination;
     private Transform prevDestination;
     private bool isChasing = false;
+    private bool isReached = false;
     private bool isResetUpdatePath = false;
-    private const float UpdatePathCoolDown = 0.3f;
+    private const float UpdatePathCoolDown = 0.15f;
+    private const string State = "State";
 
     public ZombieMovementController(
         Animator animator,
@@ -30,21 +32,22 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
         this.agent = agent;
         this.patrol = patrol;
         this.zombieSetting = zombieSetting;
-        Initialize();
     }
 
-    private void Initialize()
+    /// <inheritdoc />
+    public void Initialize()
     {
         agent.speed = zombieSetting.WalkSpeed;
         agent.acceleration = zombieSetting.WalkAcceleration;
         agent.stoppingDistance = zombieSetting.StopDistance;
         var patrolIndex = Random.Range(0, patrol.Count);
-        currDestination = patrol.Count > 0 ? patrol[patrolIndex] : null;
+        currDestination = patrol[patrolIndex];
         agent.SetDestination(currDestination.position);
+        animator.SetInteger(State, (int)ZombieAnimationEnum.Move);
     }
 
     /// <inheritdoc />
-    public void MoveOnPatrol()
+    public async UniTask MoveOnPatrol(CancellationToken cancellationToken)
     {
         if (isChasing)
         {
@@ -59,15 +62,21 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
 
         if (agent != null && currDestination != null && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            prevDestination = currDestination;
-            patrol.Remove(currDestination);
-
-            if (patrol.Count > 0)
+            if (!isReached)
             {
+                // Set new destination after reaching the current one.
+                patrol.Remove(currDestination);
+                prevDestination = currDestination;
+                isReached = true;
                 var patrolIndex = Random.Range(0, patrol.Count);
                 currDestination = patrol[patrolIndex];
+
+                animator.SetInteger(State, (int)ZombieAnimationEnum.Idle);
+                await UniTask.WaitForSeconds(Random.Range(4, 8), cancellationToken: cancellationToken);
                 agent.SetDestination(currDestination.position);
                 patrol.Add(prevDestination);
+                isReached = false;
+                animator.SetInteger(State, (int)ZombieAnimationEnum.Move);
             }
         }
     }
@@ -75,12 +84,23 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
     /// <inheritdoc />
     public async UniTask ChasePlayer(Transform target, CancellationToken cancellationToken)
     {
-        if (isResetUpdatePath || agent.pathStatus == NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance)
-            return;
+        // Check if reach to the player.
+        var distanceToTarget = Vector3.Distance(agent.transform.position, target.position);
+        if (distanceToTarget <= agent.stoppingDistance)
+        {
+            animator.SetInteger(State, (int)ZombieAnimationEnum.Attack);
+        }
+        else
+        {
+            if (!isResetUpdatePath)
+            {
+                isResetUpdatePath = true;
+                animator.SetInteger(State, (int)ZombieAnimationEnum.Move);
+                agent.SetDestination(target.position);
+                await UniTask.WaitForSeconds(UpdatePathCoolDown, cancellationToken: cancellationToken);
+                isResetUpdatePath = false;
+            }
+        }
 
-        isResetUpdatePath = true;
-        agent.SetDestination(target.position);
-        await UniTask.WaitForSeconds(UpdatePathCoolDown, cancellationToken: cancellationToken);
-        isResetUpdatePath = false;
     }
 }

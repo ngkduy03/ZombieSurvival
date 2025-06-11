@@ -41,6 +41,12 @@ public class ZombieController : ControllerBase
     }
 
     /// <inheritdoc/>
+    public void Start()
+    {
+        zombieBehavior?.Start();
+    }
+
+    /// <inheritdoc/>
     public void Update()
     {
         zombieBehavior?.Update();

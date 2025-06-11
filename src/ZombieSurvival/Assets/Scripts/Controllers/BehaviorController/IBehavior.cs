@@ -9,6 +9,11 @@ using UnityEngine;
 public interface IBehavior : IController
 {
     /// <summary>
+    /// Starts the player behavior.
+    /// </summary>
+    void Start();
+
+    /// <summary>
     /// Updates the player behavior.
     /// </summary>
     void Update();

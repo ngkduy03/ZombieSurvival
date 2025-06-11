@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,7 +12,7 @@ public class ZombieBehavior : ControllerBase, IBehavior
     private IZombieMovementController movementController;
     private IAttackController attackController;
     private IDetectionController detectionController;
-    private CancellationTokenSource chasingCTS = new();
+    private CancellationTokenSource movementCTS = new();
 
     public ZombieBehavior(
         IZombieMovementController movementController,
@@ -24,20 +25,36 @@ public class ZombieBehavior : ControllerBase, IBehavior
     }
 
     /// <inheritdoc />
+    public void Start()
+    {
+        movementController.Initialize();
+    }
+
+    /// <inheritdoc />
     public void Update()
     {
         if (detectionController.CheckInRange())
         {
-            Transform playerTransform = detectionController.GetPlayerTransform();
+            Transform playerTransform = detectionController.GetTargetTransform();
             if (playerTransform != null)
             {
-                Debug.Log("Zombie detected player: ");
-                movementController.ChasePlayer(playerTransform, chasingCTS.Token);
+                movementController.ChasePlayer(playerTransform, movementCTS.Token);
             }
         }
         else
         {
-            movementController.MoveOnPatrol();
+            movementController.MoveOnPatrol(movementCTS.Token);
         }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            movementCTS?.Cancel();
+            movementCTS?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+        base.Dispose(disposing);
     }
 }

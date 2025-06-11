@@ -22,20 +22,16 @@ public class ZombieComponent : SceneComponent<ZombieController>
     [SerializeField]
     private NavMeshAgent navMeshAgent;
 
-    private Transform zombieTransform;
     private ZombieController zombieController;
 
     protected override ZombieController CreateControllerImpl()
     {
-        animator = GetComponent<Animator>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        zombieTransform = transform;
         zombieController = new ZombieController(
             animator,
             navMeshAgent,
             patrol,
             zombieSetting,
-            zombieTransform);
+            transform);
 
         zombieController.Initialize();
         return zombieController;
@@ -44,6 +40,11 @@ public class ZombieComponent : SceneComponent<ZombieController>
     private void Awake()
     {
         zombieController = CreateController();
+    }
+
+    private void Start()
+    {
+        zombieController?.Start();
     }
 
     private void Update()

@@ -9,6 +9,11 @@ using UnityEngine.EventSystems;
 public interface IAttackController : IController
 {
     /// <summary>
+    /// Initializes the attack controller, setting up necessary components or states.
+    /// </summary>
+    void Initialize();
+
+    /// <summary>
     /// Handles the attack action.
     /// </summary>
     /// <param name="isAttacking"></param>

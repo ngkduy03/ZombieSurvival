@@ -52,6 +52,11 @@ public class PlayerController : IController
 
     }
 
+    public void Start()
+    {
+        playerBehavior?.Start();
+    }
+
     /// <summary>
     /// Updates the player behavior, which includes movement and attack actions.
     /// </summary>
@@ -62,6 +67,5 @@ public class PlayerController : IController
 
     public void Dispose()
     {
-        throw new System.NotImplementedException();
     }
 }

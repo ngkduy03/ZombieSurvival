@@ -19,6 +19,12 @@ public class PlayerBehavior : ControllerBase, IBehavior
     }
 
     /// <inheritdoc />
+    public void Start()
+    {
+        attackController?.Initialize();
+    }
+
+    /// <inheritdoc />
     public void Update()
     {
         movementController?.Move();
