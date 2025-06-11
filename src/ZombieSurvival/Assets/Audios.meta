@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:src/ZombieSurvival/Assets/Audios.meta
 guid: 9ed368345188846309215f70c535d11c
+========
+guid: 26604c1ab55899946ac31d9100ea1d7b
+>>>>>>>> origin/develop:src/ZombieSurvival/Assets/NaughtyAttributes.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
