@@ -19,7 +19,7 @@ public class PlayerController : IController
     private readonly Button reloadButton;
     private IAttackController attackController;
     private IMovementController movementController;
-    private IPlayerBehavior playerBehavior;
+    private IBehavior playerBehavior;
 
     public PlayerController(
         Transform transform,
@@ -52,16 +52,20 @@ public class PlayerController : IController
 
     }
 
+    public void Start()
+    {
+        playerBehavior?.Start();
+    }
+
     /// <summary>
     /// Updates the player behavior, which includes movement and attack actions.
     /// </summary>
     public void Update()
     {
-        playerBehavior.Update();
+        playerBehavior?.Update();
     }
 
     public void Dispose()
     {
-        throw new System.NotImplementedException();
     }
 }

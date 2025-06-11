@@ -9,15 +9,21 @@ AnimatorController:
   m_Name: PlayerAnimator
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: State
+    m_Type: 3
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: Velocity
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: State
-    m_Type: 3
-    m_DefaultFloat: 0
+    m_Controller: {fileID: 0}
+  - m_Name: FireRate
+    m_Type: 1
+    m_DefaultFloat: 5
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
@@ -37,12 +43,12 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Shoot
     m_StateMachine: {fileID: 7684119587378768402}
-    m_Mask: {fileID: 0}
+    m_Mask: {fileID: 31900000, guid: fb4b273ee2a0a8e40b4ad2a16c494bf7, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
-    m_DefaultWeight: 0
+    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -62,16 +68,16 @@ AnimatorState:
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
   m_Mirror: 0
-  m_SpeedParameterActive: 0
+  m_SpeedParameterActive: 1
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 5aa04b0a9de0b7243bec7b7a84811265, type: 2}
   m_Tag: 
-  m_SpeedParameter: 
+  m_SpeedParameter: FireRate
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_TimeParameter: FireRate
 --- !u!206 &5799560388305907966
 BlendTree:
   m_ObjectHideFlags: 1
@@ -139,14 +145,14 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 5507433502193593806}
-    m_Position: {x: 340, y: 60, z: 0}
+    m_Position: {x: 380, y: 0, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_EntryPosition: {x: 50, y: 120, z: 0}
+  m_AnyStatePosition: {x: 150, y: -30, z: 0}
+  m_EntryPosition: {x: 140, y: 40, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 5507433502193593806}

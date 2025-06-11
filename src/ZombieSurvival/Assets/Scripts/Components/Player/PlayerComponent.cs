@@ -53,6 +53,11 @@ public class PlayerComponent : SceneComponent<PlayerController>
         playerController = CreateController();
     }
 
+    private void Start()
+    {
+        playerController?.Start();
+    }
+
     private void Update()
     {
         playerController?.Update();

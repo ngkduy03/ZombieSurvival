@@ -13,7 +13,7 @@ public class FireButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     /// <summary>
     /// Event that is triggered when the fire button is pressed.
     /// </summary>
-    public event Action FireButtonPressed;
+    public event Action<bool> FireButtonPressed;
     private bool isHolding = false;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -30,9 +30,6 @@ public class FireButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void Update()
     {
-        if (isHolding)
-        {
-            FireButtonPressed?.Invoke();
-        }
+        FireButtonPressed?.Invoke(isHolding);
     }
 }

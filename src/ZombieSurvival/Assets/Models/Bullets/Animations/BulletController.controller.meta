@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:src/ZombieSurvival/Assets/Models/Bullets/Animations/BulletController.controller.meta
+guid: f9caf19c88b7b49eb8b6d299404cd915
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+========
+guid: 69ab13d16b4e0964cb774af8b9a33c6b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+>>>>>>>> origin/develop:src/ZombieSurvival/Assets/Resources/Gun_Resouces/Shotgun1.asset.meta
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

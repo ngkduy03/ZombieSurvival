@@ -9,6 +9,7 @@ public class ShotgunController : ControllerBase, IGunController
 {
     private Transform transform;
     private GunSetting gunSetting;
+    public GunSetting GunSetting => gunSetting;
     private int currentAmmo;
     private int totalAmmo;
     private Transform pelletSpawnPoint;
@@ -36,13 +37,6 @@ public class ShotgunController : ControllerBase, IGunController
         enemyMask = this.gunSetting.EnemyMask;
     }
 
-    public void FireBullet()
-    {
-        if (isFiring || totalAmmo <= 0 || isReloaded)
-            return;
-        currentAmmo--;
-    }
-
     private void CheckInRange()
     {
         var enemyAmount = Physics.OverlapSphereNonAlloc(pelletSpawnPoint.position, radius, enemyRangeChecks, enemyMask, QueryTriggerInteraction.Collide);
@@ -57,10 +51,11 @@ public class ShotgunController : ControllerBase, IGunController
                     break;
 
                 var enemyPos = enemyRangeChecks[0].transform.position;
+                enemyPos.y = 0;
 
                 // Check if the enemy is within the spread angle of the shotgun
                 // This assumes pelletSpawnPoint.forward is the direction the shotgun is facing
-                if (Vector3.Angle(pelletSpawnPoint.position, enemyPos) < spreadAngle / 2f)
+                if (Vector3.Angle(pelletSpawnPoint.forward, enemyPos) < spreadAngle / 2f)
                 {
                     //TODO: Implement damage logic here
                     Debug.Log("Hit enemy");
@@ -115,5 +110,15 @@ public class ShotgunController : ControllerBase, IGunController
     public void SetActive(bool isActive)
     {
         transform.gameObject.SetActive(isActive);
+    }
+
+    public bool CanFire()
+    {
+        return !(totalAmmo <= 0 || isFiring);
+    }
+
+    public bool IsReloaded()
+    {
+        return isReloaded;
     }
 }
