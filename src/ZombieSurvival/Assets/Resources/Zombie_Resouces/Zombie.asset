@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SpreadAngle>k__BackingField: 90
   <Radius>k__BackingField: 15
-  <Damage>k__BackingField: 0
+  <Damage>k__BackingField: 20
+  <MaxHealth>k__BackingField: 200
   <PlayerMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 128

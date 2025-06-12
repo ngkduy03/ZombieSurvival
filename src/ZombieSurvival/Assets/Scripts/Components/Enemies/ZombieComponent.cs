@@ -22,33 +22,51 @@ public class ZombieComponent : SceneComponent<ZombieController>
     [SerializeField]
     private NavMeshAgent navMeshAgent;
 
-    private ZombieController zombieController;
+    [SerializeField]
+    private CharacterController characterController;
+
+    /// <summary>
+    /// ZombieController is the controller that manages the zombie's behavior, movement, and interactions.
+    /// </summary>
+    public ZombieController ZombieController { get; private set; }
 
     protected override ZombieController CreateControllerImpl()
     {
-        zombieController = new ZombieController(
+        ZombieController = new ZombieController(
             animator,
             navMeshAgent,
             patrol,
             zombieSetting,
-            transform);
+            transform,
+            characterController);
 
-        zombieController.Initialize();
-        return zombieController;
+        ZombieController.Initialize();
+        return ZombieController;
     }
 
     private void Awake()
     {
-        zombieController = CreateController();
+        ZombieController = CreateController();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        zombieController?.Start();
+        ZombieController?.OnEnable();
+    }
+    
+    private void OnDisable()
+    {
+        ZombieController?.OnDisable();
     }
 
     private void Update()
     {
-        zombieController?.Update();
+        ZombieController?.Update();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        ZombieController?.OnTriggerEnter(other);
+        Debug.Log($"ZombieComponent OnTriggerEnter: {other.name}", gameObject);
     }
 }

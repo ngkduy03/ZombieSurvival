@@ -26,4 +26,9 @@ public class RiffleComponent : SceneComponent<RiffleController>
         controller = new RiffleController(transform, gunSetting, bulletSpawnPoint, poolHolder);
         return controller;
     }
+
+    private void Awake()
+    {
+        gunSetting.BulletPrefab.Damage = gunSetting.Damage;
+    }
 }

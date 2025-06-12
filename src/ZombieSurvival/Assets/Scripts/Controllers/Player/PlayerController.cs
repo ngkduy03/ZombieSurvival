@@ -7,18 +7,17 @@ using UnityEngine.UI;
 /// <summary>
 /// Controller for player.
 /// </summary>
-public class PlayerController : IController
+public class PlayerController : ControllerBase
 {
     private readonly Transform transform;
     private readonly Animator animator;
     private readonly InputActionReference[] inputActions;
     private readonly CharacterController characterController;
     private readonly List<IGunController> gunControllers;
+    private readonly float maxHealth;
     private readonly FireButton fireButton;
     private readonly Button switchGunButton;
     private readonly Button reloadButton;
-    private IAttackController attackController;
-    private IMovementController movementController;
     private IBehavior playerBehavior;
 
     public PlayerController(
@@ -27,6 +26,7 @@ public class PlayerController : IController
         InputActionReference[] inputActions,
         CharacterController characterController,
         List<IGunController> gunControllers,
+        float maxHealth,
         FireButton fireButton,
         Button switchGunButton,
         Button reloadButton)
@@ -36,6 +36,7 @@ public class PlayerController : IController
         this.inputActions = inputActions;
         this.characterController = characterController;
         this.gunControllers = gunControllers;
+        this.maxHealth = maxHealth;
         this.fireButton = fireButton;
         this.switchGunButton = switchGunButton;
         this.reloadButton = reloadButton;
@@ -46,15 +47,39 @@ public class PlayerController : IController
     /// </summary>
     public void Initialize()
     {
-        movementController = new MoveController(transform, animator, inputActions, characterController);
-        attackController = new FireBulletController(animator, gunControllers, fireButton, switchGunButton, reloadButton);
-        playerBehavior = new PlayerBehavior(movementController, attackController);
+        var movementController = new MoveController(transform, animator, inputActions, characterController);
+        
+        var attackController = new FireBulletController(animator, gunControllers, fireButton, switchGunButton, reloadButton);
 
+        var healthController = new PlayerHealthController(characterController, animator, maxHealth);
+
+        // Create the behavior controller with all dependencies.
+        playerBehavior = new PlayerBehavior(movementController, attackController,healthController);
     }
 
-    public void Start()
+    /// <summary>
+    /// Handles when the player takes damage. 
+    /// </summary>
+    /// <param name="damageAmount"></param>
+    public void OnTakenDamage(float damageAmount)
     {
-        playerBehavior?.Start();
+        playerBehavior?.OnTakenDamage(damageAmount);
+    }
+
+    /// <summary>
+    /// Starts the player behavior, which includes initializing movement and attack actions.
+    /// </summary>
+    public void OnEnable()
+    {
+        playerBehavior?.OnEnable();
+    }
+    
+    /// <summary>
+    /// Disables the player behavior, which includes stopping movement and attack actions.
+    /// </summary>
+    public void OnDisable()
+    {
+        playerBehavior?.OnDisable();    
     }
 
     /// <summary>
@@ -63,9 +88,5 @@ public class PlayerController : IController
     public void Update()
     {
         playerBehavior?.Update();
-    }
-
-    public void Dispose()
-    {
     }
 }

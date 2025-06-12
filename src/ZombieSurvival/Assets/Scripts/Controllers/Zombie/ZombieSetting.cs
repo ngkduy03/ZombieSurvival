@@ -18,6 +18,9 @@ public class ZombieSetting : ScriptableObject
     public float Damage { get; private set; }
 
     [field: SerializeField]
+    public float MaxHealth { get; private set; }
+
+    [field: SerializeField]
     public LayerMask PlayerMask { get; private set; }
 
     [field: SerializeField, Header("Movement")]

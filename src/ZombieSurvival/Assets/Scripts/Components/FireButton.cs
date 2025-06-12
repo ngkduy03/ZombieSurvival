@@ -19,13 +19,11 @@ public class FireButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         isHolding = true;
-        Debug.Log(isHolding);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         isHolding = false;
-        Debug.Log(isHolding);
     }
 
     void Update()
