@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -9,9 +12,10 @@ public class PlayerHealthController : ControllerBase, IHealthController
 {
     private readonly CharacterController characterController;
     private readonly Animator animator;
-    private bool isDead;
+    private readonly float maxHealth;
     private float currentHealth;
-    public float maxHealth { get; private set; }
+    private bool isDead = false;
+    public bool IsDead => isDead;
 
     public PlayerHealthController(
         CharacterController characterController,
@@ -27,23 +31,13 @@ public class PlayerHealthController : ControllerBase, IHealthController
     public void Initialize()
     {
         currentHealth = maxHealth;
-        isDead = false;
     }
 
     /// <inheritdoc />
     public void Die()
     {
-        if (isDead)
-            return;
-
-        isDead = true;
         Debug.Log("Player has died!");
-
-        // Play death animation or handle game over state
-        // Disable player control
         characterController.enabled = false;
-
-        // TODO: Add game over UI or restart logic
     }
 
 
@@ -56,16 +50,24 @@ public class PlayerHealthController : ControllerBase, IHealthController
     /// <inheritdoc />
     public void TakeDamage(float damage)
     {
-        if (isDead)
-            return;
-
         currentHealth -= damage;
-        // Debug.Log($"Player took {damage} damage. Health: {currentHealth}/{maxHealth}");
+        Debug.Log($"Player took {damage} damage. Health: {currentHealth}/{maxHealth}");
 
         if (currentHealth <= 0)
         {
             currentHealth = 0;
             Die();
         }
+    }
+
+    /// <inheritdoc />
+    public UniTask DestroyObjectAsync(CancellationToken cancellationToken, Action onDestroyed = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+
     }
 }

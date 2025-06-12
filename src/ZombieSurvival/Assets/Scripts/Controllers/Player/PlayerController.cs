@@ -69,9 +69,17 @@ public class PlayerController : ControllerBase
     /// <summary>
     /// Starts the player behavior, which includes initializing movement and attack actions.
     /// </summary>
-    public void Start()
+    public void OnEnable()
     {
-        playerBehavior?.Start();
+        playerBehavior?.OnEnable();
+    }
+    
+    /// <summary>
+    /// Disables the player behavior, which includes stopping movement and attack actions.
+    /// </summary>
+    public void OnDisable()
+    {
+        playerBehavior?.OnDisable();    
     }
 
     /// <summary>

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -14,6 +15,8 @@ public class ZombieBehavior : ControllerBase, IBehavior
     private IDetectionController detectionController;
     private IHealthController healthController;
     private CancellationTokenSource movementCTS = new();
+    private CancellationTokenSource dieCTS = new();
+    private bool isDisposed = false;
 
     public ZombieBehavior(
         IZombieMovementController movementController,
@@ -46,7 +49,7 @@ public class ZombieBehavior : ControllerBase, IBehavior
     }
 
     /// <inheritdoc />
-    public void Start()
+    public void OnEnable()
     {
         movementController.Initialize();
         attackController.Initialize();
@@ -54,8 +57,21 @@ public class ZombieBehavior : ControllerBase, IBehavior
     }
 
     /// <inheritdoc />
+    public void OnDisable()
+    {
+        Dispose();
+    }
+
+    /// <inheritdoc />
     public void Update()
     {
+        if (isDisposed || healthController.IsDead)
+        {
+            healthController.DestroyObjectAsync(dieCTS.Token, Dispose).Forget();
+            isDisposed = true;
+            return;
+        }
+
         if (detectionController.CheckInRange())
         {
             Transform playerTransform = detectionController.GetTargetTransform();
@@ -72,12 +88,17 @@ public class ZombieBehavior : ControllerBase, IBehavior
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            movementCTS?.Cancel();
-            movementCTS?.Dispose();
-            GC.SuppressFinalize(this);
-        }
-        base.Dispose(disposing);
+        movementCTS?.Cancel();
+        movementCTS?.Dispose();
+        movementCTS = null;
+        
+        dieCTS?.Cancel();
+        dieCTS?.Dispose();
+        dieCTS = null;
+        
+        movementController?.Dispose();
+        attackController?.Dispose();
+        detectionController?.Dispose();
+        healthController?.Dispose();
     }
 }

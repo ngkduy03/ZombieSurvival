@@ -47,9 +47,17 @@ public class ZombieController : ControllerBase
     /// <summary>
     /// Initializes the zombie controller by setting up the movement, attack, detection, and health controllers.
     /// </summary>
-    public void Start()
+    public void OnEnable()
     {
-        zombieBehavior?.Start();
+        zombieBehavior?.OnEnable();
+    }
+    
+    /// <summary>
+    /// Disables the zombie behavior, cleaning up resources and stopping any ongoing actions.
+    /// </summary>
+    public void OnDisable()
+    {
+        zombieBehavior?.OnDisable();
     }
 
     /// <summary>

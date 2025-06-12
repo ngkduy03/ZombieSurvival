@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,7 +31,6 @@ public class MoveController : ControllerBase, IMovementController
         this.inputActions = inputActions;
         this.characterController = characterController;
         velocity = Animator.StringToHash("Velocity");
-
     }
 
     /// <summary>
@@ -77,5 +77,11 @@ public class MoveController : ControllerBase, IMovementController
             var rotation = Quaternion.Euler(0, Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
         }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        characterController.enabled = false;
+        Array.Clear(inputActions, 0, inputActions.Length);
     }
 }

@@ -10,6 +10,7 @@ public class PlayerBehavior : ControllerBase, IBehavior
     private IMovementController movementController;
     private IAttackController attackController;
     private IHealthController healthController;
+    private bool isDisposed = false;
 
     public PlayerBehavior(
         IMovementController movementController,
@@ -34,16 +35,36 @@ public class PlayerBehavior : ControllerBase, IBehavior
     }
 
     /// <inheritdoc />
-    public void Start()
+    public void OnEnable()
     {
         healthController?.Initialize();
         attackController?.Initialize();
     }
 
+    public void OnDisable()
+    {
+        Dispose();
+    }
+
+
     /// <inheritdoc />
     public void Update()
     {
+        if (isDisposed || healthController.IsDead)
+        {
+            Dispose();
+            isDisposed = true;
+            return;
+        }
+
         movementController?.Move();
         movementController?.Look();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        movementController?.Dispose();
+        attackController?.Dispose();
+        healthController?.Dispose();
     }
 }

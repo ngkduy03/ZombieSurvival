@@ -49,9 +49,14 @@ public class ZombieComponent : SceneComponent<ZombieController>
         ZombieController = CreateController();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        ZombieController?.Start();
+        ZombieController?.OnEnable();
+    }
+    
+    private void OnDisable()
+    {
+        ZombieController?.OnDisable();
     }
 
     private void Update()
@@ -62,5 +67,6 @@ public class ZombieComponent : SceneComponent<ZombieController>
     private void OnTriggerEnter(Collider other)
     {
         ZombieController?.OnTriggerEnter(other);
+        Debug.Log($"ZombieComponent OnTriggerEnter: {other.name}", gameObject);
     }
 }

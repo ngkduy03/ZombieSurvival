@@ -98,13 +98,9 @@ public class FireBulletController : ControllerBase, IAttackController
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            Unsubscribe();
-            cts?.Cancel();
-            cts?.Dispose();
-            GC.SuppressFinalize(this);
-        }
-        base.Dispose(disposing);
+        Unsubscribe();
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = null;
     }
 }

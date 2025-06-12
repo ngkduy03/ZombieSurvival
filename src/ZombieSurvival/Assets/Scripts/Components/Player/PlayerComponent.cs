@@ -50,19 +50,24 @@ public class PlayerComponent : SceneComponent<PlayerController>
         gunControllers.Add(shotgunController);
 
         playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, maxHealth, fireButton, switchGunButton, reloadButton);
-        playerController.Initialize();
         return playerController;
     }
 
     private void Awake()
     {
         playerController = CreateController();
+        playerController.Initialize();
         currentHealth = maxHealth;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        playerController?.Start();
+        playerController?.OnEnable();
+    }
+
+    private void OnDisable()
+    {
+        playerController?.OnDisable();
     }
 
     private void Update()

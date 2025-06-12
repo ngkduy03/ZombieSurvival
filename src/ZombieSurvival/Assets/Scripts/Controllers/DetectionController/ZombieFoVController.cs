@@ -63,4 +63,10 @@ public class ZombieFoVController : ControllerBase, IDetectionController
 
         return null;
     }
+
+    protected override void Dispose(bool isDispose)
+    {
+        radius = 0f;
+        spreadAngle = 0f;
+    }
 }

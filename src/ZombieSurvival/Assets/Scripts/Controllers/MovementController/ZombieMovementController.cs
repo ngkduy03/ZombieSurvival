@@ -108,10 +108,25 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
             }
         }
     }
-    
+
     /// <inheritdoc />
     public float GetStoppingDistance()
     {
         return agent.stoppingDistance;
+    }
+
+    protected override void Dispose(bool isDispose)
+    {
+        isChasing = false;
+        isReached = false;
+        isResetUpdatePath = false;
+        currDestination = null;
+        prevDestination = null;
+
+        if (agent != null)
+        {
+            agent.ResetPath();
+            agent.enabled = false; // Disable the NavMeshAgent to stop movement.
+        }
     }
 }

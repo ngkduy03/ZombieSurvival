@@ -11,7 +11,6 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
 {
     private float attackDamage = 20f;
     private float attackCooldown;
-    private bool isAttacking = false;
     private bool canAttack = true;
     private Animator animator; // Add animator field
     private const string State = "State";
@@ -41,13 +40,13 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
     /// <param name="player">The player transform to attack</param>
     public void AttackPlayer(Transform player)
     {
-        if (!canAttack) return;
+        if (!canAttack)
+            return;
 
         if (player != null && player.TryGetComponent<PlayerComponent>(out var playerComponent))
         {
             // Play the current animation state again
             animator.Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, 0f);
-            isAttacking = true;
 
             // Apply damage to player
             var playerController = playerComponent.playerController;
@@ -66,12 +65,18 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
     /// <summary>
     /// Starts the cooldown period after an attack.
     /// </summary>
-    private async UniTaskVoid StartAttackCooldown()
+    private async UniTask StartAttackCooldown()
     {
         canAttack = false;
         await UniTask.Delay((int)(attackCooldown * 1000));
         canAttack = true;
+        // isOPend=true;
         // Reset to idle state after cooldown
         animator.SetInteger(State, (int)ZombieAnimationEnum.Idle);
+    }
+
+    protected override void Dispose(bool isDispose)
+    {
+        canAttack = false;
     }
 }

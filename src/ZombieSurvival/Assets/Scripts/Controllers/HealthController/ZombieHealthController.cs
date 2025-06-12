@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -10,8 +13,11 @@ public class ZombieHealthController : ControllerBase, IHealthController
     private CharacterController characterController;
     private readonly Animator animator;
     private ZombieSetting zombieSettings;
-    private bool isDead;
     private float currentHealth;
+    private bool isDead;
+    public bool IsDead => isDead;
+    private const string State = "State";
+    private const int ExpiredTime = 2000;
 
     public ZombieHealthController(
         CharacterController characterController,
@@ -39,12 +45,8 @@ public class ZombieHealthController : ControllerBase, IHealthController
 
         isDead = true;
         Debug.Log("Zombie has died!");
-
-        // Play death animation or handle game over state
-        // Disable player control
         characterController.enabled = false;
-
-        // TODO: Add game over UI or restart logic
+        animator.SetInteger(State, (int)ZombieAnimationEnum.Dead);
     }
 
     /// <inheritdoc />
@@ -64,8 +66,21 @@ public class ZombieHealthController : ControllerBase, IHealthController
 
         if (currentHealth <= 0)
         {
-            currentHealth = 0;
             Die();
         }
+    }
+
+    /// <inheritdoc />
+    public async UniTask DestroyObjectAsync(CancellationToken cancellationToken, Action onDestroyed = null)
+    {
+        await UniTask.Delay(ExpiredTime, cancellationToken: cancellationToken);
+        GameObject.Destroy(characterController.gameObject);
+        onDestroyed?.Invoke();
+    }
+
+    protected override void Dispose(bool isDispose)
+    {
+        isDead = true;
+        characterController.enabled = false;
     }
 }
