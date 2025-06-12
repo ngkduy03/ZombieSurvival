@@ -16,6 +16,7 @@ MonoBehaviour:
   <MagazineSize>k__BackingField: 10
   <ReloadTime>k__BackingField: 4
   <FireRate>k__BackingField: 0.8
+  <Damage>k__BackingField: 90
   <EnemyMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
