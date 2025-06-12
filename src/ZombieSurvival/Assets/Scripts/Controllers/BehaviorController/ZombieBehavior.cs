@@ -12,22 +12,37 @@ public class ZombieBehavior : ControllerBase, IBehavior
     private IZombieMovementController movementController;
     private IZombieAttackController attackController;
     private IDetectionController detectionController;
+    private IHealthController healthController;
     private CancellationTokenSource movementCTS = new();
 
     public ZombieBehavior(
         IZombieMovementController movementController,
         IZombieAttackController attackController,
-        IDetectionController detectionController)
+        IDetectionController detectionController,
+        ZombieHealthController healthController)
     {
         this.movementController = movementController;
         this.attackController = attackController;
         this.detectionController = detectionController;
+        this.healthController = healthController;
     }
 
     /// <inheritdoc />
     public void OnTakenDamage(float damageAmount)
     {
-        //TODO: Implement damage handling logic
+        healthController.TakeDamage(damageAmount);
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (!other.TryGetComponent(out BulletComponent bullet))
+            return;
+
+        if (bullet != null && !bullet.IsDeactivated)
+        {
+            healthController.TakeDamage(bullet.Damage);
+            bullet.DestroyBullet();
+        }
     }
 
     /// <inheritdoc />
@@ -35,6 +50,7 @@ public class ZombieBehavior : ControllerBase, IBehavior
     {
         movementController.Initialize();
         attackController.Initialize();
+        healthController.Initialize();
     }
 
     /// <inheritdoc />

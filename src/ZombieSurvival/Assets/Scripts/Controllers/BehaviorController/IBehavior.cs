@@ -19,4 +19,5 @@ public interface IBehavior : IController
     void Update();
     
     void OnTakenDamage(float damageAmount);
+    void OnTriggerEnter(Collider other);
 }

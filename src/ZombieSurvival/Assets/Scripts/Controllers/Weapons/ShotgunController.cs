@@ -55,13 +55,18 @@ public class ShotgunController : ControllerBase, IGunController
 
                 var enemyPos = enemyRangeChecks[0].transform.position;
                 enemyPos.y = 0;
+                var pelletSpawnPos = pelletSpawnPoint.position;
+                pelletSpawnPos.y = 0;
+                var direction = (enemyPos - pelletSpawnPos).normalized;
 
-                // Check if the enemy is within the spread angle of the shotgun
-                // This assumes pelletSpawnPoint.forward is the direction the shotgun is facing
-                if (Vector3.Angle(pelletSpawnPoint.forward, enemyPos) < spreadAngle / 2f)
+                // Check if the enemy is within the spread angle of the shotgun.
+                // This assumes pelletSpawnPoint.forward is the direction the shotgun is facing.
+                if (Vector3.Angle(pelletSpawnPoint.forward, direction) < spreadAngle / 2f)
                 {
-                    //TODO: Implement damage logic here
-                    Debug.Log("Hit enemy");
+                    if (enemy.TryGetComponent<ZombieComponent>(out var zombieComponent))
+                    {
+                        zombieComponent.ZombieController.OnTakenDamage(gunSetting.Damage);
+                    }
                 }
             }
         }
@@ -72,14 +77,12 @@ public class ShotgunController : ControllerBase, IGunController
     /// <inheritdoc/>
     public async UniTask FireBullet(CancellationToken cancellationToken)
     {
-        Debug.Log("Attempting to fire bullet");
         if (isFiring || totalAmmo <= 0 || isReloaded)
         {
             return;
         }
 
         isFiring = true;
-        Debug.Log("Firing pellet");
         if (currentAmmo < 0)
         {
             await ReloadAsync(cancellationToken);
@@ -95,7 +98,6 @@ public class ShotgunController : ControllerBase, IGunController
     /// <inheritdoc/>
     public async UniTask ReloadAsync(CancellationToken cancellationToken)
     {
-        Debug.Log("Attempting to reload");
         int needed = gunSetting.MagazineSize - currentAmmo;
         int reloadAmount = System.Math.Min(needed, totalAmmo);
 

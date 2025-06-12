@@ -3,30 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// PlayerHealthController is a component that manages the player's health in the game.
+/// ZombieHealthController is responsible for managing the health of a zombie character.
 /// </summary>
-public class PlayerHealthController : ControllerBase, IHealthController
+public class ZombieHealthController : ControllerBase, IHealthController
 {
-    private readonly CharacterController characterController;
+    private CharacterController characterController;
     private readonly Animator animator;
+    private ZombieSetting zombieSettings;
     private bool isDead;
     private float currentHealth;
-    public float maxHealth { get; private set; }
 
-    public PlayerHealthController(
+    public ZombieHealthController(
         CharacterController characterController,
         Animator animator,
-        float maxHealth)
+        ZombieSetting zombieSettings
+    )
     {
         this.characterController = characterController;
         this.animator = animator;
-        this.maxHealth = maxHealth;
+        this.zombieSettings = zombieSettings;
     }
 
     /// <inheritdoc />
     public void Initialize()
     {
-        currentHealth = maxHealth;
+        currentHealth = zombieSettings.MaxHealth;
         isDead = false;
     }
 
@@ -37,7 +38,7 @@ public class PlayerHealthController : ControllerBase, IHealthController
             return;
 
         isDead = true;
-        Debug.Log("Player has died!");
+        Debug.Log("Zombie has died!");
 
         // Play death animation or handle game over state
         // Disable player control
@@ -45,7 +46,6 @@ public class PlayerHealthController : ControllerBase, IHealthController
 
         // TODO: Add game over UI or restart logic
     }
-
 
     /// <inheritdoc />
     public float GetHealth()
@@ -60,7 +60,7 @@ public class PlayerHealthController : ControllerBase, IHealthController
             return;
 
         currentHealth -= damage;
-        // Debug.Log($"Player took {damage} damage. Health: {currentHealth}/{maxHealth}");
+        Debug.Log($"Zombie took {damage} damage. Health: {currentHealth}/{zombieSettings.MaxHealth}");
 
         if (currentHealth <= 0)
         {

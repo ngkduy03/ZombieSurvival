@@ -28,6 +28,12 @@ public class PlayerBehavior : ControllerBase, IBehavior
     }
 
     /// <inheritdoc />
+    public void OnTriggerEnter(Collider other)
+    {
+        
+    }
+
+    /// <inheritdoc />
     public void Start()
     {
         healthController?.Initialize();

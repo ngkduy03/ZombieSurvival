@@ -21,6 +21,7 @@ public class BulletComponent : MonoBehaviour
     /// <summary>
     /// If the bullet is deactivated or not.
     /// </summary>
+    [field: SerializeField]
     public float Damage { get; set; }
 
     private CancellationTokenSource cts = new();

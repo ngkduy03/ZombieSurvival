@@ -75,7 +75,7 @@ public class FireBulletController : ControllerBase, IAttackController
     /// <inheritdoc/>
     public void OnAttack(bool isPressed)
     {
-        var shootLayer = (int)PlayerAnimationLayerEnum.SHootLayer;
+        var shootLayer = (int)PlayerAnimationLayerEnum.ShootLayer;
 
         if (isPressed && !currentGunController.IsReloaded())
         {

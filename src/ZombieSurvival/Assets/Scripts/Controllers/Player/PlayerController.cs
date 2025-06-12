@@ -51,8 +51,9 @@ public class PlayerController : ControllerBase
         
         var attackController = new FireBulletController(animator, gunControllers, fireButton, switchGunButton, reloadButton);
 
-        var healthController = new PlayerHealthController(characterController,maxHealth);
+        var healthController = new PlayerHealthController(characterController, animator, maxHealth);
 
+        // Create the behavior controller with all dependencies.
         playerBehavior = new PlayerBehavior(movementController, attackController,healthController);
     }
 

@@ -55,6 +55,7 @@ MonoBehaviour:
   zombieSetting: {fileID: 11400000, guid: 61f0f96925f109643aa918b39da963ff, type: 2}
   animator: {fileID: 8634481338578682343}
   navMeshAgent: {fileID: 5360089802026714620}
+  characterController: {fileID: 8804047697329610888}
 --- !u!143 &8804047697329610888
 CharacterController:
   m_ObjectHideFlags: 0

@@ -19,7 +19,6 @@ public class RiffleController : ControllerBase, IGunController
     private Stack<BulletComponent> bulletPool = new();
     private bool isFiring = false;
     private bool isReloaded = false;
-
     private GunSetting gunSetting;
     public GunSetting GunSetting => gunSetting;
 
@@ -41,7 +40,7 @@ public class RiffleController : ControllerBase, IGunController
     public async UniTask FireBullet(CancellationToken cancellationToken)
     {
         isFiring = true;
-        Debug.Log("Firing bullet");
+        // Debug.Log("Firing bullet");
         if (currentAmmo < 0)
         {
             await ReloadAsync(cancellationToken);

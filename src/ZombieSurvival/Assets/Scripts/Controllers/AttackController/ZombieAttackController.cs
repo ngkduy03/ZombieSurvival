@@ -52,7 +52,7 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
             // Apply damage to player
             var playerController = playerComponent.playerController;
             playerController.OnTakenDamage(attackDamage);
-            Debug.Log($"Zombie attacked player for {attackDamage} damage!");
+            // Debug.Log($"Zombie attacked player for {attackDamage} damage!");
 
             // Start cooldown
             StartAttackCooldown().Forget();
