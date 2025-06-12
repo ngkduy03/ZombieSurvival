@@ -10,13 +10,13 @@ using UnityEngine;
 public class ZombieBehavior : ControllerBase, IBehavior
 {
     private IZombieMovementController movementController;
-    private IAttackController attackController;
+    private IZombieAttackController attackController;
     private IDetectionController detectionController;
     private CancellationTokenSource movementCTS = new();
 
     public ZombieBehavior(
         IZombieMovementController movementController,
-        IAttackController attackController,
+        IZombieAttackController attackController,
         IDetectionController detectionController)
     {
         this.movementController = movementController;
@@ -25,9 +25,16 @@ public class ZombieBehavior : ControllerBase, IBehavior
     }
 
     /// <inheritdoc />
+    public void OnTakenDamage(float damageAmount)
+    {
+        //TODO: Implement damage handling logic
+    }
+
+    /// <inheritdoc />
     public void Start()
     {
         movementController.Initialize();
+        attackController.Initialize();
     }
 
     /// <inheritdoc />

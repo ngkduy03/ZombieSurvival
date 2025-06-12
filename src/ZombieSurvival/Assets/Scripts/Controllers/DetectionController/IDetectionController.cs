@@ -18,4 +18,10 @@ public interface IDetectionController : IController
     /// </summary>
     /// <returns></returns>
     Transform GetTargetTransform();
+    
+    /// <summary>
+    /// Gets the transform of this detection controller's owner.
+    /// </summary>
+    /// <returns></returns>
+    Transform GetTransform();
 }

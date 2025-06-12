@@ -9,18 +9,28 @@ public class PlayerBehavior : ControllerBase, IBehavior
 {
     private IMovementController movementController;
     private IAttackController attackController;
+    private IHealthController healthController;
 
     public PlayerBehavior(
         IMovementController movementController,
-        IAttackController attackController)
+        IAttackController attackController,
+        IHealthController healthController)
     {
         this.movementController = movementController;
         this.attackController = attackController;
+        this.healthController = healthController;
+    }
+
+    /// <inheritdoc />
+    public void OnTakenDamage(float damageAmount)
+    {
+        healthController?.TakeDamage(damageAmount);
     }
 
     /// <inheritdoc />
     public void Start()
     {
+        healthController?.Initialize();
         attackController?.Initialize();
     }
 

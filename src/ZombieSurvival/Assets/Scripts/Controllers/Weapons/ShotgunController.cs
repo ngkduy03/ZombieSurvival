@@ -5,6 +5,9 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// Controller for shotgun shooting behavior.
+/// </summary>
 public class ShotgunController : ControllerBase, IGunController
 {
     private Transform transform;

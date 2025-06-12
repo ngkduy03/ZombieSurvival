@@ -14,6 +14,7 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
     private readonly Animator animator;
     private readonly List<Transform> patrol;
     private readonly ZombieSetting zombieSetting;
+    private readonly IZombieAttackController attackController;
     private Transform currDestination;
     private Transform prevDestination;
     private bool isChasing = false;
@@ -26,12 +27,14 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
         Animator animator,
         NavMeshAgent agent,
         List<Transform> patrol,
-        ZombieSetting zombieSetting)
+        ZombieSetting zombieSetting,
+        IZombieAttackController attackController)
     {
         this.animator = animator;
         this.agent = agent;
         this.patrol = patrol;
         this.zombieSetting = zombieSetting;
+        this.attackController = attackController;
     }
 
     /// <inheritdoc />
@@ -89,18 +92,26 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
         if (distanceToTarget <= agent.stoppingDistance)
         {
             animator.SetInteger(State, (int)ZombieAnimationEnum.Attack);
+            attackController.AttackPlayer(target);
         }
         else
         {
+            // If not reached, back on the patrol path.
             if (!isResetUpdatePath)
             {
                 isResetUpdatePath = true;
                 animator.SetInteger(State, (int)ZombieAnimationEnum.Move);
                 agent.SetDestination(target.position);
+
                 await UniTask.WaitForSeconds(UpdatePathCoolDown, cancellationToken: cancellationToken);
                 isResetUpdatePath = false;
             }
         }
-
+    }
+    
+    /// <inheritdoc />
+    public float GetStoppingDistance()
+    {
+        return agent.stoppingDistance;
     }
 }

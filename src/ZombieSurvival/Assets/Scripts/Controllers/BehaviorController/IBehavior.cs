@@ -17,4 +17,6 @@ public interface IBehavior : IController
     /// Updates the player behavior.
     /// </summary>
     void Update();
+    
+    void OnTakenDamage(float damageAmount);
 }

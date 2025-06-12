@@ -17,6 +17,12 @@ public class BulletComponent : MonoBehaviour
     /// If the bullet is deactivated or not.
     /// </summary>
     public bool IsDeactivated { get; set; }
+
+    /// <summary>
+    /// If the bullet is deactivated or not.
+    /// </summary>
+    public float Damage { get; set; }
+
     private CancellationTokenSource cts = new();
     private const int ExpiredTime = 5;
 

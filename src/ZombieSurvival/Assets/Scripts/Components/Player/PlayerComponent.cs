@@ -33,8 +33,14 @@ public class PlayerComponent : SceneComponent<PlayerController>
     [SerializeField]
     private ShotgunComponent shotgunComponent;
 
+    [SerializeField]
+    private float maxHealth = 100f;
+
+    private float currentHealth;
+    private bool isDead = false;
+
     private List<IGunController> gunControllers = new List<IGunController>();
-    private PlayerController playerController;
+    public PlayerController playerController { get; private set; }
 
     protected override PlayerController CreateControllerImpl()
     {
@@ -43,7 +49,7 @@ public class PlayerComponent : SceneComponent<PlayerController>
         gunControllers.Add(riffleController);
         gunControllers.Add(shotgunController);
 
-        playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, fireButton, switchGunButton, reloadButton);
+        playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, maxHealth, fireButton, switchGunButton, reloadButton);
         playerController.Initialize();
         return playerController;
     }
@@ -51,6 +57,7 @@ public class PlayerComponent : SceneComponent<PlayerController>
     private void Awake()
     {
         playerController = CreateController();
+        currentHealth = maxHealth;
     }
 
     private void Start()
