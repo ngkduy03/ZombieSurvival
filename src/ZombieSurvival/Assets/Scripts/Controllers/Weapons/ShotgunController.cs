@@ -10,25 +10,29 @@ using UnityEngine;
 /// </summary>
 public class ShotgunController : ControllerBase, IGunController
 {
-    private Transform transform;
-    private GunSetting gunSetting;
-    public GunSetting GunSetting => gunSetting;
+    private readonly Transform transform;
+    private readonly AudioSource audioSource;
     private int currentAmmo;
     private int totalAmmo;
     private Transform pelletSpawnPoint;
 
-    // The angle of spread for the shotgun pellets.
+    // Shotgun range check.
     private float spreadAngle;
     private float radius;
     private LayerMask enemyMask;
     private Collider[] enemyRangeChecks = new Collider[200];
     private bool isFiring = false;
     private bool isReloaded = false;
+    private GunSetting gunSetting;
+
+    /// <inheritdoc/>
+    public GunSetting GunSetting => gunSetting;
 
     public ShotgunController(
         Transform transform,
         GunSetting gunSetting,
-        Transform pelletSpawnPoint)
+        Transform pelletSpawnPoint,
+        AudioSource audioSource)
     {
         this.transform = transform;
         this.gunSetting = gunSetting;
@@ -38,6 +42,7 @@ public class ShotgunController : ControllerBase, IGunController
         spreadAngle = this.gunSetting.SpreadAngle;
         radius = this.gunSetting.Radius;
         enemyMask = this.gunSetting.EnemyMask;
+        this.audioSource = audioSource;
     }
 
     private void CheckInRange()
@@ -90,6 +95,8 @@ public class ShotgunController : ControllerBase, IGunController
 
         currentAmmo--;
         CheckInRange();
+        audioSource.Stop();
+        audioSource.PlayOneShot(gunSetting.FireClip);
         await UniTask.Delay((int)(gunSetting.FireRate * 1000), cancellationToken: cancellationToken);
         isFiring = false;
 
@@ -102,28 +109,39 @@ public class ShotgunController : ControllerBase, IGunController
         int reloadAmount = System.Math.Min(needed, totalAmmo);
 
         if (reloadAmount <= 0)
-        {
             return;
-        }
 
+        isReloaded = true;
+        audioSource.PlayOneShot(gunSetting.ReloadClip);
         await UniTask.Delay((int)(gunSetting.ReloadTime * 1000), cancellationToken: cancellationToken);
         currentAmmo += reloadAmount;
         totalAmmo -= reloadAmount;
         isReloaded = false;
     }
 
+    /// <inheritdoc/>
     public void SetActive(bool isActive)
     {
         transform.gameObject.SetActive(isActive);
     }
 
+    /// <inheritdoc/>
     public bool CanFire()
     {
         return !(totalAmmo <= 0 || isFiring);
     }
 
+    /// <inheritdoc/>
     public bool IsReloaded()
     {
         return isReloaded;
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        audioSource.Stop();
+        isFiring = false;
+        isReloaded = false;
     }
 }

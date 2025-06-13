@@ -36,6 +36,9 @@ public class PlayerComponent : SceneComponent<PlayerController>
     [SerializeField]
     private float maxHealth = 100f;
 
+    [SerializeField]
+    private AudioSource audioSource;
+
     private float currentHealth;
     private bool isDead = false;
 
@@ -49,7 +52,7 @@ public class PlayerComponent : SceneComponent<PlayerController>
         gunControllers.Add(riffleController);
         gunControllers.Add(shotgunController);
 
-        playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, maxHealth, fireButton, switchGunButton, reloadButton);
+        playerController = new PlayerController(transform, animator, inputActions, characterController, gunControllers, audioSource, maxHealth, fireButton, switchGunButton, reloadButton);
         return playerController;
     }
 

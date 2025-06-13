@@ -16,11 +16,14 @@ public class ShotgunComponent : SceneComponent<ShotgunController>
     [SerializeField]
     private Transform pelletSpawnPoint;
 
+    [SerializeField]
+    private AudioSource audioSource;
+
     private ShotgunController controller;
 
     protected override ShotgunController CreateControllerImpl()
     {
-        controller = new ShotgunController(transform, gunSetting, pelletSpawnPoint);
+        controller = new ShotgunController(transform, gunSetting, pelletSpawnPoint, audioSource);
         return controller;
     }
 

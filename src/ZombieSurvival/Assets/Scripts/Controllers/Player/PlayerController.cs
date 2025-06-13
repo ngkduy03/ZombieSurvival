@@ -11,6 +11,7 @@ public class PlayerController : ControllerBase
 {
     private readonly Transform transform;
     private readonly Animator animator;
+    private readonly AudioSource audioSource;
     private readonly InputActionReference[] inputActions;
     private readonly CharacterController characterController;
     private readonly List<IGunController> gunControllers;
@@ -26,6 +27,7 @@ public class PlayerController : ControllerBase
         InputActionReference[] inputActions,
         CharacterController characterController,
         List<IGunController> gunControllers,
+        AudioSource audioSource,
         float maxHealth,
         FireButton fireButton,
         Button switchGunButton,
@@ -40,6 +42,7 @@ public class PlayerController : ControllerBase
         this.fireButton = fireButton;
         this.switchGunButton = switchGunButton;
         this.reloadButton = reloadButton;
+        this.audioSource = audioSource;
     }
 
     /// <summary>
@@ -48,8 +51,8 @@ public class PlayerController : ControllerBase
     public void Initialize()
     {
         var movementController = new MoveController(transform, animator, inputActions, characterController);
-        
-        var attackController = new FireBulletController(animator, gunControllers, fireButton, switchGunButton, reloadButton);
+
+        var attackController = new FireBulletController(animator, gunControllers, fireButton, switchGunButton, reloadButton, audioSource);
 
         var healthController = new PlayerHealthController(characterController, animator, maxHealth);
 

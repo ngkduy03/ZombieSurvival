@@ -18,12 +18,15 @@ public class RiffleComponent : SceneComponent<RiffleController>
 
     [SerializeField]
     private Transform poolHolder;
+    
+    [SerializeField]
+    private AudioSource audioSource;
 
     private RiffleController controller;
 
     protected override RiffleController CreateControllerImpl()
     {
-        controller = new RiffleController(transform, gunSetting, bulletSpawnPoint, poolHolder);
+        controller = new RiffleController(transform, gunSetting, bulletSpawnPoint, poolHolder, audioSource);
         return controller;
     }
 
