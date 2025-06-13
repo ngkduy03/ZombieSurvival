@@ -2099,7 +2099,8 @@ PrefabInstance:
       propertyPath: eyesGlow
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7317118214247140889, guid: 16f88bac483bd004aa718dd62225897d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

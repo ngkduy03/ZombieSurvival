@@ -125,7 +125,6 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
 
         if (agent != null)
         {
-            agent.ResetPath();
             agent.enabled = false; // Disable the NavMeshAgent to stop movement.
         }
     }
