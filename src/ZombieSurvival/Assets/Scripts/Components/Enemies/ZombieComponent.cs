@@ -24,6 +24,9 @@ public class ZombieComponent : SceneComponent<ZombieController>
 
     [SerializeField]
     private CharacterController characterController;
+    
+    [SerializeField]
+    private DissolverObject dissolverObject;
 
     /// <summary>
     /// ZombieController is the controller that manages the zombie's behavior, movement, and interactions.
@@ -38,7 +41,8 @@ public class ZombieComponent : SceneComponent<ZombieController>
             patrol,
             zombieSetting,
             transform,
-            characterController);
+            characterController,
+            dissolverObject);
 
         ZombieController.Initialize();
         return ZombieController;

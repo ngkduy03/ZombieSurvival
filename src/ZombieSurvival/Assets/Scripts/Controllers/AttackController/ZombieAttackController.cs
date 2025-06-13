@@ -12,8 +12,9 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
     private float attackDamage = 20f;
     private float attackCooldown;
     private bool canAttack = true;
-    private Animator animator; // Add animator field
+    private Animator animator;
     private const string State = "State";
+    private CancellationTokenSource attackCTS = new();
 
     public ZombieAttackController(Animator animator)
     {
@@ -45,16 +46,12 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
 
         if (player != null && player.TryGetComponent<PlayerComponent>(out var playerComponent))
         {
-            // Play the current animation state again
             animator.Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, 0f);
-
             // Apply damage to player
             var playerController = playerComponent.playerController;
             playerController.OnTakenDamage(attackDamage);
             // Debug.Log($"Zombie attacked player for {attackDamage} damage!");
-
-            // Start cooldown
-            StartAttackCooldown().Forget();
+            StartAttackCooldown(attackCTS.Token).Forget();
         }
         else
         {
@@ -65,12 +62,11 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
     /// <summary>
     /// Starts the cooldown period after an attack.
     /// </summary>
-    private async UniTask StartAttackCooldown()
+    private async UniTask StartAttackCooldown(CancellationToken cancellationToken)
     {
         canAttack = false;
-        await UniTask.Delay((int)(attackCooldown * 1000));
+        await UniTask.Delay((int)(attackCooldown * 1000), cancellationToken: cancellationToken);
         canAttack = true;
-        // isOPend=true;
         // Reset to idle state after cooldown
         animator.SetInteger(State, (int)ZombieAnimationEnum.Idle);
     }
@@ -78,5 +74,8 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
     protected override void Dispose(bool isDispose)
     {
         canAttack = false;
+        attackCTS?.Cancel();
+        attackCTS?.Dispose();
+        attackCTS = null;
     }
 }

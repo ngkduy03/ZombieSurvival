@@ -13,6 +13,7 @@ public class ZombieController : ControllerBase
     private List<Transform> patrol;
     private ZombieSetting zombieSetting;
     private Transform zombieTransform;
+    private DissolverObject dissolverObject;
     private IBehavior zombieBehavior;
 
     public ZombieController(
@@ -21,7 +22,8 @@ public class ZombieController : ControllerBase
         List<Transform> patrol,
         ZombieSetting zombieSetting,
         Transform zombieTransform,
-        CharacterController characterController)
+        CharacterController characterController,
+        DissolverObject dissolverObject)
     {
         this.animator = animator;
         this.navMeshAgent = navMeshAgent;
@@ -29,6 +31,7 @@ public class ZombieController : ControllerBase
         this.zombieSetting = zombieSetting;
         this.zombieTransform = zombieTransform;
         this.characterController = characterController;
+        this.dissolverObject = dissolverObject;
     }
     public void Initialize()
     {
@@ -38,7 +41,7 @@ public class ZombieController : ControllerBase
 
         var detectionController = new ZombieFoVController(zombieTransform, zombieSetting);
 
-        var healthController = new ZombieHealthController(characterController, animator, zombieSetting);
+        var healthController = new ZombieHealthController(characterController, animator, zombieSetting, dissolverObject);
 
         // Create the behavior controller with all dependencies.
         zombieBehavior = new ZombieBehavior(movementController, attackController, detectionController, healthController);

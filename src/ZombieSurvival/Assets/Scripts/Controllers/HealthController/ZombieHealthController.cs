@@ -10,9 +10,10 @@ using UnityEngine;
 /// </summary>
 public class ZombieHealthController : ControllerBase, IHealthController
 {
-    private CharacterController characterController;
     private readonly Animator animator;
-    private ZombieSetting zombieSettings;
+    private readonly CharacterController characterController;
+    private readonly ZombieSetting zombieSettings;
+    private DissolverObject dissolverObject;
     private float currentHealth;
     private bool isDead;
     public bool IsDead => isDead;
@@ -22,12 +23,13 @@ public class ZombieHealthController : ControllerBase, IHealthController
     public ZombieHealthController(
         CharacterController characterController,
         Animator animator,
-        ZombieSetting zombieSettings
-    )
+        ZombieSetting zombieSettings,
+        DissolverObject dissolverObject)
     {
         this.characterController = characterController;
         this.animator = animator;
         this.zombieSettings = zombieSettings;
+        this.dissolverObject = dissolverObject;
     }
 
     /// <inheritdoc />
@@ -74,6 +76,7 @@ public class ZombieHealthController : ControllerBase, IHealthController
     public async UniTask DestroyObjectAsync(CancellationToken cancellationToken, Action onDestroyed = null)
     {
         await UniTask.Delay(ExpiredTime, cancellationToken: cancellationToken);
+        await dissolverObject.DissolveAsync(cancellationToken);
         GameObject.Destroy(characterController.gameObject);
         onDestroyed?.Invoke();
     }

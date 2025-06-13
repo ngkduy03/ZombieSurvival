@@ -65,10 +65,14 @@ public class ZombieBehavior : ControllerBase, IBehavior
     /// <inheritdoc />
     public void Update()
     {
-        if (isDisposed || healthController.IsDead)
+
+        if (healthController.IsDead)
         {
-            healthController.DestroyObjectAsync(dieCTS.Token, Dispose).Forget();
-            isDisposed = true;
+            if (!isDisposed && healthController.IsDead)
+            {
+                isDisposed = true;
+                healthController.DestroyObjectAsync(dieCTS.Token, Dispose).Forget();
+            }
             return;
         }
 
