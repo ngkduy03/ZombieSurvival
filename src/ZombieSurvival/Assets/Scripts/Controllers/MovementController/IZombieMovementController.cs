@@ -20,8 +20,14 @@ public interface IZombieMovementController : IController
     UniTask MoveOnPatrol(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Defines the look method for zombies.
+    /// Defines the chase method for zombies.
     /// </summary>
     /// <param name="playerTransform"></param>
     UniTask ChasePlayer(Transform playerTransform, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Gets the stopping distance for the zombie's movement.
+    /// </summary>
+    /// <returns>The distance at which the zombie stops approaching its target</returns>
+    float GetStoppingDistance();
 }

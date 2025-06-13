@@ -75,7 +75,7 @@ public class FireBulletController : ControllerBase, IAttackController
     /// <inheritdoc/>
     public void OnAttack(bool isPressed)
     {
-        var shootLayer = (int)PlayerAnimationLayerEnum.SHootLayer;
+        var shootLayer = (int)PlayerAnimationLayerEnum.ShootLayer;
 
         if (isPressed && !currentGunController.IsReloaded())
         {
@@ -98,13 +98,9 @@ public class FireBulletController : ControllerBase, IAttackController
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            Unsubscribe();
-            cts?.Cancel();
-            cts?.Dispose();
-            GC.SuppressFinalize(this);
-        }
-        base.Dispose(disposing);
+        Unsubscribe();
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = null;
     }
 }

@@ -45,6 +45,12 @@ public class ZombieFoVController : ControllerBase, IDetectionController
     }
 
     /// <inheritdoc />
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    /// <inheritdoc />
     public Transform GetTargetTransform()
     {
         if (Physics.OverlapSphereNonAlloc(centerPos, radius, playerCheck, playerMask, QueryTriggerInteraction.Collide) > 0)
@@ -56,5 +62,11 @@ public class ZombieFoVController : ControllerBase, IDetectionController
         }
 
         return null;
+    }
+
+    protected override void Dispose(bool isDispose)
+    {
+        radius = 0f;
+        spreadAngle = 0f;
     }
 }
