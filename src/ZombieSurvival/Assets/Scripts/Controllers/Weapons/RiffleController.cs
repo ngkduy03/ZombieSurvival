@@ -45,7 +45,6 @@ public class RiffleController : ControllerBase, IGunController
     public async UniTask FireBullet(CancellationToken cancellationToken)
     {
         isFiring = true;
-        // Debug.Log("Firing bullet");
         if (currentAmmo < 0)
         {
             await ReloadAsync(cancellationToken);

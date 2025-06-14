@@ -100,9 +100,18 @@ public class FireBulletController : ControllerBase, IAttackController
         currentGunController.ReloadAsync(cts.Token);
     }
 
+    /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
         Unsubscribe();
+        currentGunController.SetActive(false);
+        animator.SetLayerWeight((int)PlayerAnimationLayerEnum.ShootLayer, 0f);
+
+        foreach (var gunController in gunControllers)
+        {
+            gunController.SetActive(false);
+        }
+
         cts?.Cancel();
         cts?.Dispose();
         cts = null;

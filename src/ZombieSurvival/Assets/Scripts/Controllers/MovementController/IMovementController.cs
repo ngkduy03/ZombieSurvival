@@ -8,6 +8,11 @@ using UnityEngine;
 public interface IMovementController : IController
 {
     /// <summary>
+    /// Initialize the movement controller.
+    /// </summary>
+    void Initialize();
+
+    /// <summary>
     /// Define movement method.
     /// </summary>
     void Move();
