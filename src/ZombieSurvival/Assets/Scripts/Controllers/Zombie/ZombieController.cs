@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class ZombieController : ControllerBase
 {
     private Animator animator;
+    private AudioSource audioSource;
     private NavMeshAgent navMeshAgent;
     private CharacterController characterController;
     private List<Transform> patrol;
@@ -15,33 +16,38 @@ public class ZombieController : ControllerBase
     private Transform zombieTransform;
     private DissolverObject dissolverObject;
     private IBehavior zombieBehavior;
+    private ParticleSystem bloodParticleSystem;
 
     public ZombieController(
         Animator animator,
+        AudioSource audioSource,
         NavMeshAgent navMeshAgent,
         List<Transform> patrol,
         ZombieSetting zombieSetting,
         Transform zombieTransform,
         CharacterController characterController,
-        DissolverObject dissolverObject)
+        DissolverObject dissolverObject,
+        ParticleSystem bloodParticleSystem)
     {
         this.animator = animator;
+        this.audioSource = audioSource;
         this.navMeshAgent = navMeshAgent;
         this.patrol = patrol;
         this.zombieSetting = zombieSetting;
         this.zombieTransform = zombieTransform;
         this.characterController = characterController;
         this.dissolverObject = dissolverObject;
+        this.bloodParticleSystem = bloodParticleSystem;
     }
     public void Initialize()
     {
-        var attackController = new ZombieAttackController(animator);
+        var attackController = new ZombieAttackController(animator, audioSource, zombieSetting);
 
         var movementController = new ZombieMovementController(animator, navMeshAgent, patrol, zombieSetting, attackController);
 
         var detectionController = new ZombieFoVController(zombieTransform, zombieSetting);
 
-        var healthController = new ZombieHealthController(characterController, animator, zombieSetting, dissolverObject);
+        var healthController = new ZombieHealthController(characterController, animator, audioSource, zombieSetting, dissolverObject,bloodParticleSystem);
 
         // Create the behavior controller with all dependencies.
         zombieBehavior = new ZombieBehavior(movementController, attackController, detectionController, healthController);

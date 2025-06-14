@@ -9,16 +9,23 @@ using UnityEngine;
 /// </summary>
 public class ZombieAttackController : ControllerBase, IZombieAttackController
 {
+    private readonly Animator animator;
+    private readonly AudioSource audioSource;
+    private ZombieSetting zombieSetting;
     private float attackDamage = 20f;
     private float attackCooldown;
     private bool canAttack = true;
-    private Animator animator;
     private const string State = "State";
     private CancellationTokenSource attackCTS = new();
 
-    public ZombieAttackController(Animator animator)
+    public ZombieAttackController(
+        Animator animator,
+        AudioSource audioSource,
+        ZombieSetting zombieSetting)
     {
         this.animator = animator;
+        this.audioSource = audioSource;
+        this.zombieSetting = zombieSetting;
     }
 
     /// <summary>
@@ -47,11 +54,11 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
         if (player != null && player.TryGetComponent<PlayerComponent>(out var playerComponent))
         {
             animator.Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, 0f);
-            // Apply damage to player
             var playerController = playerComponent.playerController;
             playerController.OnTakenDamage(attackDamage);
-            // Debug.Log($"Zombie attacked player for {attackDamage} damage!");
             StartAttackCooldown(attackCTS.Token).Forget();
+            audioSource.Stop();
+            audioSource.PlayOneShot(zombieSetting.AttackClip);
         }
         else
         {
@@ -74,6 +81,7 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
     protected override void Dispose(bool isDispose)
     {
         canAttack = false;
+        audioSource.Stop();
         attackCTS?.Cancel();
         attackCTS?.Dispose();
         attackCTS = null;

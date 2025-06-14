@@ -37,4 +37,10 @@ public class ZombieSetting : ScriptableObject
 
     [field: SerializeField]
     public float StopDistance { get; private set; }
+
+    [field: SerializeField]
+    public AudioClip AttackClip { get; private set; }
+
+    [field: SerializeField]
+    public AudioClip DieClip { get; private set; }
 }
