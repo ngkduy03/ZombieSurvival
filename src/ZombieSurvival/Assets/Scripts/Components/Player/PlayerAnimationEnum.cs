@@ -7,5 +7,6 @@ public enum PlayerAnimationEnum
     Idle = 0,
     Move = 1,
     SHoot = 2,
-    Guard = 3
+    Guard = 3,
+    Death = 4
 }

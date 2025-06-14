@@ -26,7 +26,7 @@ public class FireButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         isHolding = false;
     }
 
-    void Update()
+    private void Update()
     {
         FireButtonPressed?.Invoke(isHolding);
     }

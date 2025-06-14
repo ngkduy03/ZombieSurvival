@@ -20,10 +20,19 @@ public class ZombieComponent : SceneComponent<ZombieController>
     private Animator animator;
 
     [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
     private NavMeshAgent navMeshAgent;
 
     [SerializeField]
     private CharacterController characterController;
+    
+    [SerializeField]
+    private DissolverObject dissolverObject;
+
+    [SerializeField]
+    private ParticleSystem bloodParticleSystem;
 
     /// <summary>
     /// ZombieController is the controller that manages the zombie's behavior, movement, and interactions.
@@ -34,11 +43,14 @@ public class ZombieComponent : SceneComponent<ZombieController>
     {
         ZombieController = new ZombieController(
             animator,
+            audioSource,
             navMeshAgent,
             patrol,
             zombieSetting,
             transform,
-            characterController);
+            characterController,
+            dissolverObject,
+            bloodParticleSystem);
 
         ZombieController.Initialize();
         return ZombieController;

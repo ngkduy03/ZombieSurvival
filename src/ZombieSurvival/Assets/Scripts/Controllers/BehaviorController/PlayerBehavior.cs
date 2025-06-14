@@ -37,6 +37,7 @@ public class PlayerBehavior : ControllerBase, IBehavior
     /// <inheritdoc />
     public void OnEnable()
     {
+        movementController?.Initialize();
         healthController?.Initialize();
         attackController?.Initialize();
     }
@@ -50,10 +51,14 @@ public class PlayerBehavior : ControllerBase, IBehavior
     /// <inheritdoc />
     public void Update()
     {
-        if (isDisposed || healthController.IsDead)
+        if (healthController.IsDead)
         {
-            Dispose();
-            isDisposed = true;
+            if (!isDisposed)
+            {
+                isDisposed = true;
+                Dispose();
+            }
+
             return;
         }
 

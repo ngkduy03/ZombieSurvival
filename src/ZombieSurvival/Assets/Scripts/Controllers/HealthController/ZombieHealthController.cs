@@ -10,9 +10,12 @@ using UnityEngine;
 /// </summary>
 public class ZombieHealthController : ControllerBase, IHealthController
 {
-    private CharacterController characterController;
     private readonly Animator animator;
-    private ZombieSetting zombieSettings;
+    private readonly AudioSource audioSource;
+    private readonly CharacterController characterController;
+    private readonly ZombieSetting zombieSettings;
+    private readonly ParticleSystem bloodParticleSystem;
+    private DissolverObject dissolverObject;
     private float currentHealth;
     private bool isDead;
     public bool IsDead => isDead;
@@ -22,12 +25,17 @@ public class ZombieHealthController : ControllerBase, IHealthController
     public ZombieHealthController(
         CharacterController characterController,
         Animator animator,
-        ZombieSetting zombieSettings
-    )
+        AudioSource audioSource,
+        ZombieSetting zombieSettings,
+        DissolverObject dissolverObject,
+        ParticleSystem bloodParticleSystem)
     {
         this.characterController = characterController;
         this.animator = animator;
+        this.audioSource = audioSource;
         this.zombieSettings = zombieSettings;
+        this.dissolverObject = dissolverObject;
+        this.bloodParticleSystem = bloodParticleSystem;
     }
 
     /// <inheritdoc />
@@ -44,9 +52,10 @@ public class ZombieHealthController : ControllerBase, IHealthController
             return;
 
         isDead = true;
-        Debug.Log("Zombie has died!");
         characterController.enabled = false;
         animator.SetInteger(State, (int)ZombieAnimationEnum.Dead);
+        audioSource.Stop();
+        audioSource.PlayOneShot(zombieSettings.DieClip);
     }
 
     /// <inheritdoc />
@@ -62,6 +71,8 @@ public class ZombieHealthController : ControllerBase, IHealthController
             return;
 
         currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, zombieSettings.MaxHealth);
+        bloodParticleSystem.Play();
         Debug.Log($"Zombie took {damage} damage. Health: {currentHealth}/{zombieSettings.MaxHealth}");
 
         if (currentHealth <= 0)
@@ -74,6 +85,7 @@ public class ZombieHealthController : ControllerBase, IHealthController
     public async UniTask DestroyObjectAsync(CancellationToken cancellationToken, Action onDestroyed = null)
     {
         await UniTask.Delay(ExpiredTime, cancellationToken: cancellationToken);
+        await dissolverObject.DissolveAsync(cancellationToken);
         GameObject.Destroy(characterController.gameObject);
         onDestroyed?.Invoke();
     }
@@ -82,5 +94,7 @@ public class ZombieHealthController : ControllerBase, IHealthController
     {
         isDead = true;
         characterController.enabled = false;
+        audioSource.Stop();
+        bloodParticleSystem.Stop();
     }
 }

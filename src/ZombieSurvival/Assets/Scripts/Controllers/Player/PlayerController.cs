@@ -11,6 +11,8 @@ public class PlayerController : ControllerBase
 {
     private readonly Transform transform;
     private readonly Animator animator;
+    private readonly AudioSource gunAudioSource;
+    private readonly AudioSource movementAudioSource;
     private readonly InputActionReference[] inputActions;
     private readonly CharacterController characterController;
     private readonly List<IGunController> gunControllers;
@@ -18,6 +20,7 @@ public class PlayerController : ControllerBase
     private readonly FireButton fireButton;
     private readonly Button switchGunButton;
     private readonly Button reloadButton;
+    private readonly Slider healthSlider;
     private IBehavior playerBehavior;
 
     public PlayerController(
@@ -26,10 +29,13 @@ public class PlayerController : ControllerBase
         InputActionReference[] inputActions,
         CharacterController characterController,
         List<IGunController> gunControllers,
+        AudioSource gunAudioSource,
+        AudioSource movementAudioSource,
         float maxHealth,
         FireButton fireButton,
         Button switchGunButton,
-        Button reloadButton)
+        Button reloadButton,
+        Slider healthSlider)
     {
         this.transform = transform;
         this.animator = animator;
@@ -40,6 +46,9 @@ public class PlayerController : ControllerBase
         this.fireButton = fireButton;
         this.switchGunButton = switchGunButton;
         this.reloadButton = reloadButton;
+        this.gunAudioSource = gunAudioSource;
+        this.movementAudioSource = movementAudioSource;
+        this.healthSlider = healthSlider;
     }
 
     /// <summary>
@@ -47,11 +56,11 @@ public class PlayerController : ControllerBase
     /// </summary>
     public void Initialize()
     {
-        var movementController = new MoveController(transform, animator, inputActions, characterController);
-        
-        var attackController = new FireBulletController(animator, gunControllers, fireButton, switchGunButton, reloadButton);
+        var movementController = new MoveController(transform, animator, inputActions, characterController, movementAudioSource);
 
-        var healthController = new PlayerHealthController(characterController, animator, maxHealth);
+        var attackController = new FireBulletController(animator, gunControllers, fireButton, switchGunButton, reloadButton, gunAudioSource);
+
+        var healthController = new PlayerHealthController(characterController, animator, maxHealth, healthSlider);
 
         // Create the behavior controller with all dependencies.
         playerBehavior = new PlayerBehavior(movementController, attackController,healthController);

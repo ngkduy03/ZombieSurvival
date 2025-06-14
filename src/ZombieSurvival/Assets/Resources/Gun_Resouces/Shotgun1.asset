@@ -14,12 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <TotalAmmo>k__BackingField: 100
   <MagazineSize>k__BackingField: 10
-  <ReloadTime>k__BackingField: 4
+  <ReloadTime>k__BackingField: 1.8
   <FireRate>k__BackingField: 0.8
-  <Damage>k__BackingField: 120
+  <Damage>k__BackingField: 500
   <EnemyMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 64
+  <FireClip>k__BackingField: {fileID: 8300000, guid: ddfd9835cd53dd541acf81f59da9eef3,
+    type: 3}
+  <ReloadClip>k__BackingField: {fileID: 8300000, guid: 8f268095f67575b44b10ea19a4482b2c,
+    type: 3}
+  <SwitchGunClip>k__BackingField: {fileID: 8300000, guid: 406c929b7299afb469c82778f8d15d5b,
+    type: 3}
   <BulletPrefab>k__BackingField: {fileID: 0}
   <SpreadAngle>k__BackingField: 55
   <Radius>k__BackingField: 3.6

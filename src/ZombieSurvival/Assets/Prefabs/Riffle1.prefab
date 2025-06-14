@@ -118,3 +118,4 @@ MonoBehaviour:
   gunSetting: {fileID: 11400000, guid: fdfed234d56b268459dc750e300b057d, type: 2}
   bulletSpawnPoint: {fileID: 0}
   poolHolder: {fileID: 0}
+  animator: {fileID: 0}

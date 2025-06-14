@@ -19,8 +19,12 @@ MonoBehaviour:
   <PlayerMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 128
-  <WalkSpeed>k__BackingField: 3.5
+  <WalkSpeed>k__BackingField: 2.2
   <WalkAcceleration>k__BackingField: 8
   <WalkAnimationSpeed>k__BackingField: 0
   <WalkAnimationAcceleration>k__BackingField: 0
   <StopDistance>k__BackingField: 2
+  <AttackClip>k__BackingField: {fileID: 8300000, guid: 29726c349dbf64b0aadfe8c9ec00d728,
+    type: 3}
+  <DieClip>k__BackingField: {fileID: 8300000, guid: 9dcd13733ae1542fba4664e841eb4fff,
+    type: 3}

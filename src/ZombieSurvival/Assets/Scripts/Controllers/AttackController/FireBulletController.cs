@@ -10,14 +10,16 @@ using UnityEngine.UI;
 /// </summary>
 public class FireBulletController : ControllerBase, IAttackController
 {
-    private const int FiredPerSec = 1;
     private readonly Animator animator;
+    private readonly AudioSource audioSource;
     private List<IGunController> gunControllers = new List<IGunController>();
     private FireButton fireButton;
     private Button switchGunButton;
     private Button reloadButton;
     private IGunController currentGunController;
     private int gunIndex = 0;
+    private const int FiredPerSec = 1;
+    private const string FireRate = "FireRate";
     private CancellationTokenSource cts = new CancellationTokenSource();
 
     public FireBulletController(
@@ -25,7 +27,8 @@ public class FireBulletController : ControllerBase, IAttackController
         List<IGunController> gunControllers,
         FireButton fireButton,
         Button switchGunButton,
-        Button reloadButton)
+        Button reloadButton,
+        AudioSource audioSource)
 
     {
         this.animator = animator;
@@ -33,8 +36,10 @@ public class FireBulletController : ControllerBase, IAttackController
         this.fireButton = fireButton;
         this.switchGunButton = switchGunButton;
         this.reloadButton = reloadButton;
+        this.audioSource = audioSource;
     }
 
+    /// <inheritdoc/>
     public void Initialize()
     {
         Subscribe();
@@ -62,14 +67,14 @@ public class FireBulletController : ControllerBase, IAttackController
         switchGunButton.onClick.RemoveListener(OnGunSwitched);
         reloadButton.onClick.RemoveListener(OnReload);
     }
-
     private void OnGunSwitched()
     {
         gunIndex++;
         currentGunController.SetActive(false);
         currentGunController = gunControllers[gunIndex % gunControllers.Count];
         currentGunController.SetActive(true);
-        animator.SetFloat("FireRate", FiredPerSec / currentGunController.GunSetting.FireRate);
+        audioSource.PlayOneShot(currentGunController.GunSetting.SwitchGunClip);
+        animator.SetFloat(FireRate, FiredPerSec / currentGunController.GunSetting.FireRate);
     }
 
     /// <inheritdoc/>
@@ -90,15 +95,23 @@ public class FireBulletController : ControllerBase, IAttackController
             animator.SetLayerWeight(shootLayer, 0f);
         }
     }
-
     private void OnReload()
     {
         currentGunController.ReloadAsync(cts.Token);
     }
 
+    /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
         Unsubscribe();
+        currentGunController.SetActive(false);
+        animator.SetLayerWeight((int)PlayerAnimationLayerEnum.ShootLayer, 0f);
+
+        foreach (var gunController in gunControllers)
+        {
+            gunController.SetActive(false);
+        }
+
         cts?.Cancel();
         cts?.Dispose();
         cts = null;

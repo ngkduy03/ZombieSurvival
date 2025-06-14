@@ -25,6 +25,15 @@ public class GunSetting : ScriptableObject
     [field: SerializeField]
     public LayerMask EnemyMask { get; private set; }
 
+    [field: SerializeField]
+    public AudioClip FireClip { get; private set; }
+
+    [field: SerializeField]
+    public AudioClip ReloadClip { get; private set; }
+
+    [field: SerializeField]
+    public AudioClip SwitchGunClip { get; private set; }
+
     [field: SerializeField, Header("Riffle")]
     public BulletComponent BulletPrefab { get; private set; }
 

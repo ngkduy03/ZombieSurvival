@@ -13,6 +13,7 @@ public class MoveController : ControllerBase, IMovementController
     private readonly Animator animator;
     private readonly InputActionReference[] inputActions;
     private readonly CharacterController characterController;
+    private readonly AudioSource movementAudioSource;
     private float walkSpeed = 0;
     private float walkAnimationSpeed = 1f;
     private Vector3 moveDirection;
@@ -24,24 +25,30 @@ public class MoveController : ControllerBase, IMovementController
         Transform transform,
         Animator animator,
         InputActionReference[] inputActions,
-        CharacterController characterController)
+        CharacterController characterController,
+        AudioSource movementAudioSource)
     {
         this.transform = transform;
         this.animator = animator;
         this.inputActions = inputActions;
         this.characterController = characterController;
-        velocity = Animator.StringToHash("Velocity");
+        this.movementAudioSource = movementAudioSource;
     }
 
-    /// <summary>
-    /// Moves the player in the specified direction.
-    /// </summary>
+    ///<inheritdoc />
+    public void Initialize()
+    {
+        velocity = Animator.StringToHash("Velocity");
+        movementAudioSource.Stop();
+        movementAudioSource.loop = true;
+    }
+
+    ///<inheritdoc />
     public void Move()
     {
         var direction = inputActions[(int)InputActionEnum.Move].action.ReadValue<Vector2>().normalized;
         moveDirection = new Vector3(direction.x, 0, direction.y);
 
-        // If the player is moving, set the velocity to the walk speed.
         if (direction.magnitude > 0)
         {
             walkSpeed += walkSpeedAccel;
@@ -49,25 +56,26 @@ public class MoveController : ControllerBase, IMovementController
         }
         else
         {
-            // Slow down the player when not pressing the key with double the deceleration.
             walkSpeed -= walkSpeedAccel * 10;
             walkAnimationSpeed -= walkSpeedAnimationAccel * 2 * Time.deltaTime;
         }
 
-        // Clamp the speed and animation speed.
         walkSpeed = Mathf.Clamp(walkSpeed, 0, 5);
         walkAnimationSpeed = Mathf.Clamp(walkAnimationSpeed, 0, 1);
-
-        // Set the animator's velocity parameter.
         animator.SetFloat(velocity, walkAnimationSpeed);
-
-        // Move the character controller.
         characterController.SimpleMove(moveDirection * walkSpeed);
+
+        if (walkSpeed > 0 && !movementAudioSource.isPlaying)
+        {
+            movementAudioSource.Play();
+        }
+        else if (walkSpeed <= 0 && movementAudioSource.isPlaying)
+        {
+            movementAudioSource.Stop();
+        }
     }
 
-    /// <summary>
-    /// Rotates the player to face the direction of movement based on input.
-    /// </summary>
+    ///<inheritdoc />
     public void Look()
     {
         var lookDirection = inputActions[(int)InputActionEnum.Look].action.ReadValue<Vector2>();
