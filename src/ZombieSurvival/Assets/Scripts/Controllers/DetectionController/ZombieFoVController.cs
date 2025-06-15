@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -27,20 +28,26 @@ public class ZombieFoVController : ControllerBase, IDetectionController
     /// <inheritdoc />
     public bool CheckInRange()
     {
-        var playerTransform = GetTargetTransform();
+        var player = GetPlayerComponent();
 
-        if (playerTransform == null)
+        if (player == null)
         {
             return false;
         }
 
+        if (player.playerController.GetAttackStatus())
+        {
+            return true;
+        }
+
         // Check if the player is within the spread angle of the zombiePos
-        var ToPlayerDirection = playerTransform.position - transform.position;
+        var ToPlayerDirection = player.transform.position - transform.position;
         ToPlayerDirection.y = 0;
         if (Vector3.Angle(transform.forward, ToPlayerDirection) < spreadAngle / 2f)
         {
             return true;
         }
+
         return false;
     }
 
@@ -51,13 +58,13 @@ public class ZombieFoVController : ControllerBase, IDetectionController
     }
 
     /// <inheritdoc />
-    public Transform GetTargetTransform()
+    public PlayerComponent GetPlayerComponent()
     {
         if (Physics.OverlapSphereNonAlloc(centerPos, radius, playerCheck, playerMask, QueryTriggerInteraction.Collide) > 0)
         {
             if (playerCheck[0].TryGetComponent<PlayerComponent>(out var playerComponent))
             {
-                return playerComponent.transform;
+                return playerComponent;
             }
         }
 

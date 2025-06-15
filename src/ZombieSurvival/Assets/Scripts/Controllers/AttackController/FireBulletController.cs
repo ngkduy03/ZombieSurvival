@@ -21,6 +21,10 @@ public class FireBulletController : ControllerBase, IAttackController
     private const int FiredPerSec = 1;
     private const string FireRate = "FireRate";
     private CancellationTokenSource cts = new CancellationTokenSource();
+    private bool isAttacking = false;
+
+    /// <inheritdoc/>
+    public bool IsAttacking => isAttacking;
 
     public FireBulletController(
         Animator animator,
@@ -86,12 +90,14 @@ public class FireBulletController : ControllerBase, IAttackController
         {
             if (currentGunController.CanFire())
             {
+                isAttacking = true;
                 currentGunController.FireBullet(cts.Token);
                 animator.SetLayerWeight(shootLayer, 1f);
             }
         }
         else
         {
+            isAttacking = false;
             animator.SetLayerWeight(shootLayer, 0f);
         }
     }

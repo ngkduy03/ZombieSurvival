@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -44,11 +47,21 @@ public class PlayerComponent : SceneComponent<PlayerController>
 
     [SerializeField]
     private AudioSource movementAudioSource;
+
+    [SerializeField]
+    private GameObject endgamePanel;
+
+    [SerializeField]
+    private TMP_Text endgameText;
+    private const string YouWonText = "You Won";
+    private const string YouDieText = "You Die";
+    private const int DelayPopUp = 3500;
     private float currentHealth;
     private bool isDead = false;
 
     private List<IGunController> gunControllers = new List<IGunController>();
     public PlayerController playerController { get; private set; }
+    private CancellationTokenSource cts = new();
 
     protected override PlayerController CreateControllerImpl()
     {
@@ -63,7 +76,6 @@ public class PlayerComponent : SceneComponent<PlayerController>
 
     private void Awake()
     {
-        playerController = CreateController();
         playerController.Initialize();
         currentHealth = maxHealth;
     }
@@ -76,10 +88,39 @@ public class PlayerComponent : SceneComponent<PlayerController>
     private void OnDisable()
     {
         playerController?.OnDisable();
+        cts.Cancel();
+        cts.Dispose();
+        cts = null;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out WareHouseComponent wareHouse))
+        {
+            endgamePanel.SetActive(true);
+            endgameText.text = YouWonText;
+        }
     }
 
     private void Update()
     {
-        playerController?.Update();
+        if (playerController.GetDieStatus() && !isDead)
+        {
+            isDead = true;
+            ShowGameOverAsync(cts.Token).Forget();
+            return;
+        }
+        else
+        {
+            playerController?.Update();
+        }
+    }
+
+    private async UniTask ShowGameOverAsync(CancellationToken cancellationToken)
+    {
+        await UniTask.Delay(DelayPopUp, cancellationToken: cancellationToken);
+        endgamePanel.SetActive(true);
+        endgameText.text = YouDieText;
+        playerController.Dispose();
     }
 }

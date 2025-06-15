@@ -15,6 +15,7 @@ public class ZombieHealthController : ControllerBase, IHealthController
     private readonly CharacterController characterController;
     private readonly ZombieSetting zombieSettings;
     private readonly ParticleSystem bloodParticleSystem;
+    private readonly BlockObjectController blockObjectController;
     private DissolverObject dissolverObject;
     private float currentHealth;
     private bool isDead;
@@ -28,7 +29,8 @@ public class ZombieHealthController : ControllerBase, IHealthController
         AudioSource audioSource,
         ZombieSetting zombieSettings,
         DissolverObject dissolverObject,
-        ParticleSystem bloodParticleSystem)
+        ParticleSystem bloodParticleSystem,
+        BlockObjectController blockObjectController)
     {
         this.characterController = characterController;
         this.animator = animator;
@@ -36,6 +38,7 @@ public class ZombieHealthController : ControllerBase, IHealthController
         this.zombieSettings = zombieSettings;
         this.dissolverObject = dissolverObject;
         this.bloodParticleSystem = bloodParticleSystem;
+        this.blockObjectController = blockObjectController;
     }
 
     /// <inheritdoc />
@@ -52,6 +55,7 @@ public class ZombieHealthController : ControllerBase, IHealthController
             return;
 
         isDead = true;
+        blockObjectController?.CheckDestroy();
         characterController.enabled = false;
         animator.SetInteger(State, (int)ZombieAnimationEnum.Dead);
         audioSource.Stop();

@@ -52,8 +52,6 @@ MonoBehaviour:
   patrol:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   zombieSetting: {fileID: 11400000, guid: 61f0f96925f109643aa918b39da963ff, type: 2}
   animator: {fileID: 8634481338578682343}
   audioSource: {fileID: 220988071437291436}
@@ -266,6 +264,11 @@ PrefabInstance:
     - target: {fileID: 3866282427809730800, guid: 16f88bac483bd004aa718dd62225897d,
         type: 3}
       propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3866282427809730800, guid: 16f88bac483bd004aa718dd62225897d,
+        type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4797993383793408352, guid: 16f88bac483bd004aa718dd62225897d,

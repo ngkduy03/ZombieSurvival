@@ -27,12 +27,13 @@ public class ZombieComponent : SceneComponent<ZombieController>
 
     [SerializeField]
     private CharacterController characterController;
-    
+
     [SerializeField]
     private DissolverObject dissolverObject;
 
     [SerializeField]
     private ParticleSystem bloodParticleSystem;
+    private BlockObjectController blockObjectController;
 
     /// <summary>
     /// ZombieController is the controller that manages the zombie's behavior, movement, and interactions.
@@ -50,7 +51,8 @@ public class ZombieComponent : SceneComponent<ZombieController>
             transform,
             characterController,
             dissolverObject,
-            bloodParticleSystem);
+            bloodParticleSystem,
+            blockObjectController);
 
         ZombieController.Initialize();
         return ZombieController;
@@ -58,17 +60,21 @@ public class ZombieComponent : SceneComponent<ZombieController>
 
     private void Awake()
     {
-        ZombieController = CreateController();
     }
 
     private void OnEnable()
     {
         ZombieController?.OnEnable();
     }
-    
+
     private void OnDisable()
     {
         ZombieController?.OnDisable();
+    }
+
+    public void Initialize(BlockObjectController blockObjectController)
+    {
+        this.blockObjectController = blockObjectController;
     }
 
     private void Update()

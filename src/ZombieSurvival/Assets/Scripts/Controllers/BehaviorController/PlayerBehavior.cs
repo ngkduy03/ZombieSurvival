@@ -42,11 +42,11 @@ public class PlayerBehavior : ControllerBase, IBehavior
         attackController?.Initialize();
     }
 
+    /// <inheritdoc />
     public void OnDisable()
     {
         Dispose();
     }
-
 
     /// <inheritdoc />
     public void Update()
@@ -66,10 +66,23 @@ public class PlayerBehavior : ControllerBase, IBehavior
         movementController?.Look();
     }
 
+    /// <inheritdoc />
+    public bool GetAttackStatus()
+    {
+        return attackController.IsAttacking;
+    }
+
+    /// <inheritdoc />
+    public bool GetDieStatus()
+    {
+        return healthController.IsDead;
+    }
+
     protected override void Dispose(bool disposing)
     {
         movementController?.Dispose();
         attackController?.Dispose();
         healthController?.Dispose();
     }
+
 }

@@ -30,12 +30,6 @@ public class ZombieSetting : ScriptableObject
     public float WalkAcceleration { get; private set; }
 
     [field: SerializeField]
-    public float WalkAnimationSpeed { get; private set; }
-
-    [field: SerializeField]
-    public float WalkAnimationAcceleration { get; private set; }
-
-    [field: SerializeField]
     public float StopDistance { get; private set; }
 
     [field: SerializeField]

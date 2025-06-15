@@ -34,4 +34,16 @@ public interface IBehavior : IController
     /// </summary>
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other);
+    
+    /// <summary>
+    /// Gets the attack status of the player.
+    /// </summary>
+    /// <returns></returns>
+    bool GetAttackStatus();
+
+    /// <summary>
+    /// Gets the attack status of the player.
+    /// </summary>
+    /// <returns></returns>
+    bool GetDieStatus();
 }
