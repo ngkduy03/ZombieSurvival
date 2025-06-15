@@ -239,7 +239,6 @@ GameObject:
   - component: {fileID: 6595373232741016197}
   - component: {fileID: 3410512949986304413}
   - component: {fileID: 3882821203225145532}
-  - component: {fileID: 7727928635793972939}
   m_Layer: 7
   m_Name: PlayerArmature
   m_TagString: Player
@@ -286,11 +285,14 @@ MonoBehaviour:
   fireButton: {fileID: 0}
   switchGunButton: {fileID: 0}
   reloadButton: {fileID: 0}
+  healthSlider: {fileID: 0}
   riffleComponent: {fileID: 4390364955544131151}
   shotgunComponent: {fileID: 6420420807250829601}
-  maxHealth: 100
+  maxHealth: 600
   gunAudioSource: {fileID: 8682614707060180251}
   movementAudioSource: {fileID: 3751302737330696471}
+  endgamePanel: {fileID: 0}
+  endgameText: {fileID: 0}
 --- !u!143 &6595373232741016197
 CharacterController:
   m_ObjectHideFlags: 0
@@ -369,14 +371,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!81 &7727928635793972939
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 693741722399213788}
-  m_Enabled: 1
 --- !u!1 &794439306503831230
 GameObject:
   m_ObjectHideFlags: 0

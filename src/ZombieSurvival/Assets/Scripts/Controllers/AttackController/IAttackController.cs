@@ -18,4 +18,9 @@ public interface IAttackController : IController
     /// </summary>
     /// <param name="isAttacking"></param>
     void OnAttack(bool isAttacking);
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the controller is currently attacking.
+    /// </summary>
+    bool IsAttacking { get; }
 }

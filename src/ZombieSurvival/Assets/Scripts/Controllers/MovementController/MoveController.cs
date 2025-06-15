@@ -17,7 +17,7 @@ public class MoveController : ControllerBase, IMovementController
     private float walkSpeed = 0;
     private float walkAnimationSpeed = 1f;
     private Vector3 moveDirection;
-    private const float walkSpeedAccel = 0.01f;
+    private const float walkSpeedAccel = 0.2f;
     private const float walkSpeedAnimationAccel = 1.8f;
     private int velocity;
 

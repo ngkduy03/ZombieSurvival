@@ -13,6 +13,19 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
     private readonly AudioSource audioSource;
     private ZombieSetting zombieSetting;
     private float attackDamage = 20f;
+
+    /// <summary>
+    /// Gets the damage amount the zombie inflicts per attack.
+    /// </summary>
+    public float AttackDamage => attackDamage;
+
+    private bool isAttacking = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the zombie is currently attacking.
+    /// </summary>
+    public bool IsAttacking => isAttacking;
+
     private float attackCooldown;
     private bool canAttack = true;
     private const string State = "State";
@@ -27,11 +40,6 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
         this.audioSource = audioSource;
         this.zombieSetting = zombieSetting;
     }
-
-    /// <summary>
-    /// Gets the damage amount the zombie inflicts per attack.
-    /// </summary>
-    public float AttackDamage => attackDamage;
 
     /// <summary>
     /// Initializes attack controller with default values.
@@ -53,6 +61,7 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
 
         if (player != null && player.TryGetComponent<PlayerComponent>(out var playerComponent))
         {
+            isAttacking = true;
             animator.Play(animator.GetCurrentAnimatorStateInfo(0).fullPathHash, 0, 0f);
             var playerController = playerComponent.playerController;
             playerController.OnTakenDamage(attackDamage);
@@ -62,7 +71,7 @@ public class ZombieAttackController : ControllerBase, IZombieAttackController
         }
         else
         {
-            Debug.LogWarning("Player component not found on transform");
+            isAttacking = false;
         }
     }
 

@@ -26,10 +26,24 @@ public class BulletComponent : MonoBehaviour
 
     private CancellationTokenSource cts = new();
     private const int ExpiredTime = 5;
+    private int ObstacleLayer;
+
+    private void Awake()
+    {
+        ObstacleLayer = LayerMask.NameToLayer("Obstacle");
+    }
 
     private void OnEnable()
     {
         ExpireBullet(cts.Token).Forget();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == ObstacleLayer)
+        {
+            DestroyBullet();
+        }
     }
 
     private void Update()

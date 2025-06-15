@@ -14,11 +14,11 @@ public interface IDetectionController : IController
     bool CheckInRange();
 
     /// <summary>
-    /// Gets the transform of the player if detected within range.
+    /// Gets the component of the player if detected within range.
     /// </summary>
     /// <returns></returns>
-    Transform GetTargetTransform();
-    
+    PlayerComponent GetPlayerComponent();
+
     /// <summary>
     /// Gets the transform of this detection controller's owner.
     /// </summary>

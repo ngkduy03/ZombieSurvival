@@ -17,6 +17,7 @@ public class ZombieController : ControllerBase
     private DissolverObject dissolverObject;
     private IBehavior zombieBehavior;
     private ParticleSystem bloodParticleSystem;
+    private BlockObjectController blockObjectController;
 
     public ZombieController(
         Animator animator,
@@ -27,7 +28,8 @@ public class ZombieController : ControllerBase
         Transform zombieTransform,
         CharacterController characterController,
         DissolverObject dissolverObject,
-        ParticleSystem bloodParticleSystem)
+        ParticleSystem bloodParticleSystem,
+        BlockObjectController blockObjectController)
     {
         this.animator = animator;
         this.audioSource = audioSource;
@@ -38,6 +40,7 @@ public class ZombieController : ControllerBase
         this.characterController = characterController;
         this.dissolverObject = dissolverObject;
         this.bloodParticleSystem = bloodParticleSystem;
+        this.blockObjectController = blockObjectController;
     }
     public void Initialize()
     {
@@ -47,7 +50,7 @@ public class ZombieController : ControllerBase
 
         var detectionController = new ZombieFoVController(zombieTransform, zombieSetting);
 
-        var healthController = new ZombieHealthController(characterController, animator, audioSource, zombieSetting, dissolverObject,bloodParticleSystem);
+        var healthController = new ZombieHealthController(characterController, animator, audioSource, zombieSetting, dissolverObject, bloodParticleSystem, blockObjectController);
 
         // Create the behavior controller with all dependencies.
         zombieBehavior = new ZombieBehavior(movementController, attackController, detectionController, healthController);

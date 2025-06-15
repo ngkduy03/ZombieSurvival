@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b1cce45132cbdd41981998e433d739e, type: 3}
   m_Name: Shotgun1
   m_EditorClassIdentifier: 
-  <TotalAmmo>k__BackingField: 100
+  <TotalAmmo>k__BackingField: 2147483647
   <MagazineSize>k__BackingField: 10
   <ReloadTime>k__BackingField: 1.8
-  <FireRate>k__BackingField: 0.8
-  <Damage>k__BackingField: 500
+  <FireRate>k__BackingField: 0.7
+  <Damage>k__BackingField: 70
   <EnemyMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 64
@@ -27,5 +27,5 @@ MonoBehaviour:
   <SwitchGunClip>k__BackingField: {fileID: 8300000, guid: 406c929b7299afb469c82778f8d15d5b,
     type: 3}
   <BulletPrefab>k__BackingField: {fileID: 0}
-  <SpreadAngle>k__BackingField: 55
+  <SpreadAngle>k__BackingField: 90
   <Radius>k__BackingField: 3.6

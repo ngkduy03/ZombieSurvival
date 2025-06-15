@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -22,7 +23,6 @@ public class PlayerController : ControllerBase
     private readonly Button reloadButton;
     private readonly Slider healthSlider;
     private IBehavior playerBehavior;
-
     public PlayerController(
         Transform transform,
         Animator animator,
@@ -63,7 +63,7 @@ public class PlayerController : ControllerBase
         var healthController = new PlayerHealthController(characterController, animator, maxHealth, healthSlider);
 
         // Create the behavior controller with all dependencies.
-        playerBehavior = new PlayerBehavior(movementController, attackController,healthController);
+        playerBehavior = new PlayerBehavior(movementController, attackController, healthController);
     }
 
     /// <summary>
@@ -82,13 +82,13 @@ public class PlayerController : ControllerBase
     {
         playerBehavior?.OnEnable();
     }
-    
+
     /// <summary>
     /// Disables the player behavior, which includes stopping movement and attack actions.
     /// </summary>
     public void OnDisable()
     {
-        playerBehavior?.OnDisable();    
+        playerBehavior?.OnDisable();
     }
 
     /// <summary>
@@ -96,6 +96,27 @@ public class PlayerController : ControllerBase
     /// </summary>
     public void Update()
     {
+        if (playerBehavior.GetDieStatus())
+        {
+        }
         playerBehavior?.Update();
+    }
+
+    /// <summary>
+    /// Gets the current attack state of the player.
+    /// </summary>
+    /// <returns></returns>
+    public bool GetAttackStatus()
+    {
+        return playerBehavior?.GetAttackStatus() ?? false;
+    }
+
+    /// <summary>
+    /// Gets the player die status.
+    /// </summary>
+    /// <returns></returns>
+    public bool GetDieStatus()
+    {
+        return playerBehavior?.GetDieStatus() ?? false;
     }
 }

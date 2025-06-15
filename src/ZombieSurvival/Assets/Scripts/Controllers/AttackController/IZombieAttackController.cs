@@ -22,4 +22,9 @@ public interface IZombieAttackController : IController
     /// Gets the damage amount the zombie inflicts per attack.
     /// </summary>
     float AttackDamage { get; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the zombie is currently attacking.
+    /// </summary>
+    bool IsAttacking { get; }
 }

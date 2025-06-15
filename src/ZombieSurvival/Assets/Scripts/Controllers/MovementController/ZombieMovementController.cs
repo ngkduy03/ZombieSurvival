@@ -52,6 +52,7 @@ public class ZombieMovementController : ControllerBase, IZombieMovementControlle
     /// <inheritdoc />
     public async UniTask MoveOnPatrol(CancellationToken cancellationToken)
     {
+        isResetUpdatePath = false;
         if (isChasing)
         {
             isChasing = false;

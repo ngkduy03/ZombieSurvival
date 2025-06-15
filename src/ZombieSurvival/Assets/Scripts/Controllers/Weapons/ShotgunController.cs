@@ -56,7 +56,7 @@ public class ShotgunController : ControllerBase, IGunController
                 var enemy = enemyRangeChecks[i];
 
                 if (enemy == null)
-                    break;
+                    continue;
 
                 var enemyPos = enemyRangeChecks[0].transform.position;
                 enemyPos.y = 0;
@@ -75,7 +75,6 @@ public class ShotgunController : ControllerBase, IGunController
                 }
             }
         }
-
         Array.Clear(enemyRangeChecks, 0, enemyRangeChecks.Length);
     }
 

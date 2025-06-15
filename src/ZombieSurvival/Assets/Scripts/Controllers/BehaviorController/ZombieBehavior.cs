@@ -17,6 +17,7 @@ public class ZombieBehavior : ControllerBase, IBehavior
     private CancellationTokenSource movementCTS = new();
     private CancellationTokenSource dieCTS = new();
     private bool isDisposed = false;
+    private bool isMoveCTSCancel = false;
 
     public ZombieBehavior(
         IZombieMovementController movementController,
@@ -76,12 +77,32 @@ public class ZombieBehavior : ControllerBase, IBehavior
             return;
         }
 
-        if (detectionController.CheckInRange())
+        bool isPlayerInRange = detectionController.CheckInRange();
+
+        // Handle state transition between chasing and patrolling
+        if (isPlayerInRange && isMoveCTSCancel)
         {
-            Transform playerTransform = detectionController.GetTargetTransform();
-            if (playerTransform != null)
+            // Reset token for chase behavior
+            movementCTS?.Cancel();
+            movementCTS?.Dispose();
+            movementCTS = new();
+            isMoveCTSCancel = false;
+        }
+        else if (!isPlayerInRange && !isMoveCTSCancel)
+        {
+            // Reset token for patrol behavior
+            movementCTS?.Cancel();
+            movementCTS?.Dispose();
+            movementCTS = new();
+            isMoveCTSCancel = true;
+        }
+
+        if (isPlayerInRange)
+        {
+            var playerComponent = detectionController.GetPlayerComponent();
+            if (playerComponent != null)
             {
-                movementController.ChasePlayer(playerTransform, movementCTS.Token);
+                movementController.ChasePlayer(playerComponent.transform, movementCTS.Token);
             }
         }
         else
@@ -104,5 +125,17 @@ public class ZombieBehavior : ControllerBase, IBehavior
         movementController?.Dispose();
         attackController?.Dispose();
         detectionController?.Dispose();
+    }
+
+    /// <inheritdoc />
+    public bool GetAttackStatus()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public bool GetDieStatus()
+    {
+        throw new NotImplementedException();
     }
 }
