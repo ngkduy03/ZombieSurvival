@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:src/ZombieSurvival/Assets/Models/Skybox/Materials/Skybox.mat.meta
+guid: 224d8cbb4c8104c52933ef97051f854f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+========
+guid: fdfed234d56b268459dc750e300b057d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+>>>>>>>> origin/develop:src/ZombieSurvival/Assets/Resources/Gun_Resouces/Riffle1.asset.meta
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
